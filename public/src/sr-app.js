@@ -1,0 +1,1 @@
+angular.module('sr-app', ['sr-app-routes']);
