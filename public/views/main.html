@@ -1,1 +1,11 @@
-MAIN PAGE
+NEW SESSION
+<form ng-submit="newSession()">
+    Enter text and hit enter:
+    <br><input type="text" ng-model="title" name="title" ng-required="true"/>
+    <br><label>isPrivate:
+        <input type="checkbox" ng-model="isPrivate">
+    </label>
+    <br><input type="password" ng-model="password" name="password" ng-required="isPrivate" ng-show="isPrivate" />
+    <br><input type="text" ng-model="username" name="username" ng-required="true" />
+    <br><input type="submit" id="submit" value="Submit" />
+</form>

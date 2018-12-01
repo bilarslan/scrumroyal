@@ -1,5 +1,4 @@
 module.exports = {
-    planningSessions:[],
     socket: function (io) {
 
 
@@ -11,10 +10,10 @@ module.exports = {
             });
 
 
-            socket.on('newPlanningSession', function() );
+            socket.on('newPlanningSession', function() {
+
+                
+            });
         });
-    },
-    getNumberOfSessions: function(){
-        return this.planningSessions.length;
     }
 };
