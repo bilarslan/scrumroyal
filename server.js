@@ -20,30 +20,91 @@ io.use(function (socket, next) {
 */
 var sessions = [];
 
-function createPlanningSession(i) {
-    var group = io.of('/group-' + i);
+function createPlanningSession(params) {
+
+    var sessionId = params.sessionId;
+    var username = params.username;
+    var isPrivate = params.isPrivate;
+    var password = params.password;
+    var adminToken = '';
+
+    var group = io.of('/group-' + sessionId);
+
+    group.sessionConfig = {
+        adminToken: adminToken,
+        isPrivate: isPrivate,
+        password: password,
+        users: []
+    }
+
+    sessions.push(group);
+
     group.on('connection', function (socket) {
 
+        //console.log(socket.nsp.name);
         var username = socket.handshake.query['username'];
-        if (username != null) {
-            socket.username = username;
+        var password = socket.handshake.query['password'];
+        var adminToken = socket.handshake.query['adminToken'];
+
+        var groupName = socket.nsp.name;
+
+        console.log(username, password, adminToken, groupName);
+
+        var session = sessions.find(x => x.name == groupName);
+        if (session) {
+            if (session.sessionConfig.isPrivate == true) {
+                if (session.sessionConfig.password == password) {
+                    socket.username = username;
+                    group.sessionConfig.users.push({ id: socket.id, username: username });
+                    console.log('User connected ' + socket.username);
+                    group.emit('user.connect', { 'username': socket.username, users: group.sessionConfig.users });
+                }
+                else {
+                    socket.disconnect(true);
+                    return;
+                }
+            }
+            else {
+                socket.username = username;
+                group.sessionConfig.users.push({ id: socket.id, username: username });
+                console.log('User connected ' + socket.username);
+                group.emit('user.connect', { 'username': socket.username, users: group.sessionConfig.users });
+            }
+        }
+        else {
+            console.log('session is not found!');
         }
 
-        console.log('User connected ' + socket.username);
-
-        group.emit('user.connect', { 'username': socket.username });
-
         socket.on('disconnect', function (data) {
-            console.log('User disconnected ' + socket.username);
-            group.emit('user.disconnect', { 'username': socket.username });
+
+            var session = sessions.find(x => x.name == groupName);
+            if (session) {
+                var user = session.sessionConfig.users.find(x => x.id == socket.id);
+                if (user) {
+                    session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
+                } else {
+                    console.log('user is not found!');
+                }
+            }
+            else {
+                console.log('session is not found!');
+            }
+            console.log('User disconnected ' + socket.username + ' from ' + groupName);
+            group.emit('user.disconnect', { 'username': socket.username, users: group.sessionConfig.users });
         });
 
     });
 
 }
 
+var d = {
+    sessionId: 26,
+    username: 'bilarslan',
+    isPrivate: false,
+    password: 123456
+}
 
-createPlanningSession(26);
+createPlanningSession(d);
 
 app.post('/newPlanning', function (req, res) {
 

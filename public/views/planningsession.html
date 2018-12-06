@@ -1,4 +1,6 @@
-<form ng-submit="join()">
-<br><br><input type="text" ng-model="username" name="username" ng-required="true"/>
-    <br><input type="submit" id="submit" value="Submit" />
-</form>
+Users:
+<ul>
+    <li ng-repeat="user in users track by $index">
+     {{user.username}}
+    </li>
+</ul>

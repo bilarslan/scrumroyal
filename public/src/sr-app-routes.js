@@ -6,7 +6,7 @@ angular.module('sr-app-routes', ['ngRoute'])
                 templateUrl: '../views/main.html',
                 controller: 'main-controller'
             })
-            .when('/planningsession/:id', {
+            .when('/planningsession/:id/:username/:password', {
                 templateUrl: '../views/planningsession.html',
                 controller: 'planningsession-controller'
             });
