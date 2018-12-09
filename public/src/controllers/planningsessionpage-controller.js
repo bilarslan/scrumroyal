@@ -1,9 +1,11 @@
 angular.module('planningsessionpage-controller', [])
-    .controller('planningsession-controller', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+    .controller('planningsession-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService ) {
 
-        var id = $routeParams.id;
-        var username = $routeParams.username;
-        var password = $routeParams.password;
+        console.log(authService.userData);
+
+        var id = authService.userData.sessionId;
+        var username = authService.userData.username;
+        var password = authService.userData.password;
         
         $scope.users = [];
 

@@ -31,6 +31,7 @@ function createPlanningSession(params) {
     var group = io.of('/group-' + sessionId);
 
     group.sessionConfig = {
+        sessionId: sessionId,
         adminToken: adminToken,
         isPrivate: isPrivate,
         password: password,
@@ -41,7 +42,6 @@ function createPlanningSession(params) {
 
     group.on('connection', function (socket) {
 
-        //console.log(socket.nsp.name);
         var username = socket.handshake.query['username'];
         var password = socket.handshake.query['password'];
         var adminToken = socket.handshake.query['adminToken'];
@@ -100,7 +100,7 @@ function createPlanningSession(params) {
 var d = {
     sessionId: 26,
     username: 'bilarslan',
-    isPrivate: false,
+    isPrivate: true,
     password: 123456
 }
 
@@ -111,6 +111,7 @@ app.post('/newPlanning', function (req, res) {
     var title = req.body.title;
     var password = req.body.password;
     var username = req.body.username;
+    var isPrivate = req.body.isPrivate;
 
     if (typeof title !== 'string' || typeof username !== 'string') {
         return res.status(400).json({
@@ -119,14 +120,47 @@ app.post('/newPlanning', function (req, res) {
     }
 
     var data = {
-        sessionId: Math.floor(Math.random() * 100),
+        sessionId: Math.floor(Math.random() * 100) + 100,
         title: title,
         username: username,
-        isAdmin: true
+        isPrivate,
+        password: password
     };
 
-    createPlanningSession(data.sessionId)
+    createPlanningSession(data)
     res.json(data);
+});
+
+app.post('/joinSession', function (req, res) {
+
+    var username = req.body.username;
+    var sessionId = req.body.sessionId;
+    var password = req.body.password;
+
+    var session = sessions.find(x => x.sessionConfig.sessionId == sessionId);
+
+    if (session) {
+        if (session.sessionConfig.isPrivate == true && password == null) {
+            res.status(401).json({ message: "please password" });
+        }
+        else if (session.sessionConfig.isPrivate == true && session.sessionConfig.password != password) {
+            res.status(401).json({ message: "wrong password" });
+        }
+        else if (session.sessionConfig.isPrivate == true && session.sessionConfig.password == password) {
+            res.json({ message: "successss" });
+        }
+        else if (session.sessionConfig.isPrivate == false) {
+            res.json({ message: 'successss' });
+        }else{
+            res.json({message:'asdasd'});
+        }
+
+    } else {
+        res.status(404).json({ message: 'session is not found!' });
+    }
+
+
+
 });
 
 http.listen(PORT, function () {
