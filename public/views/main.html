@@ -1,26 +1,30 @@
 NEW SESSION
 <form ng-submit="newSession()">
     Enter text and hit enter:
-    <br><input type="text" ng-model="create.title" name="create.title" ng-required="true"/>
+    <br><label for="create.title">Title: </label><input type="text" ng-model="create.title" name="create.title" ng-required="true" />
     <br><label>isPrivate:
         <input type="checkbox" ng-model="create.isPrivate">
     </label>
-    <br><input type="password" ng-model="create.password" name="create.password" ng-required="create.isPrivate" ng-show="create.isPrivate" />
-    <br><input type="text" ng-model="create.username" name="create.username" ng-required="true" />
-    <br><input type="submit" id="submitNewS" value="Submit" />
+    <br><label for="create.password" ng-show="create.isPrivate">Password: </label><input type="password" ng-model="create.password" name="create.password" ng-required="create.isPrivate" ng-show="create.isPrivate" />
+    <br><label for="create.username">Username: </label><input type="text" ng-model="create.username" name="create.username" ng-required="true" />
+    <br><label for="create.title">Title: </label><input type="submit" id="submitNewS" value="Submit" />
 </form>
+<label ng-show="createMessage" >{{createMessage}}</label>
 
-
+<br>
+<br>
 <br>
 
 JOIN SESSION
 <form ng-submit="joinSession()">
     Enter text and hit enter:
-    <br><input type="text" ng-model="join.sessionId" name="join.sessionId" ng-required="true"/>
+    <br><label for="join.sessionId">Title: </label><input type="text" ng-model="join.sessionId" name="join.sessionId" ng-required="true" />
     <br><label>isPrivate:
         <input type="checkbox" ng-model="join.isPrivate">
     </label>
-    <br><input type="password" ng-model="join.password" name="join.password" ng-required="join.isPrivate" ng-show="join.isPrivate" />
-    <br><input type="text" ng-model="join.username" name="join.username" ng-required="true" />
+    <br><label for="join.password" ng-show="join.isPrivate" >Password: </label><input type="password" ng-model="join.password" name="join.password" ng-required="join.isPrivate" ng-show="join.isPrivate" />
+    <br><label for="join.username">Username: </label><input type="text" ng-model="join.username" name="join.username" ng-required="true" />
     <br><input type="submit" id="submitJoin" value="Submit" />
 </form>
+
+<label ng-show="joinMessage" >{{joinMessage}}</label>

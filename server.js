@@ -26,19 +26,24 @@ function createPlanningSession(params) {
     var username = params.username;
     var isPrivate = params.isPrivate;
     var password = params.password;
-    var adminToken = '';
+    var title = params.title;
+    var adminToken = params.adminToken;
 
     var group = io.of('/group-' + sessionId);
 
     group.sessionConfig = {
         sessionId: sessionId,
+        title: title,
         adminToken: adminToken,
         isPrivate: isPrivate,
         password: password,
         users: []
     }
 
+
     sessions.push(group);
+
+
 
     group.on('connection', function (socket) {
 
@@ -99,6 +104,7 @@ function createPlanningSession(params) {
 
 var d = {
     sessionId: 26,
+    title: 'DENEME',
     username: 'bilarslan',
     isPrivate: true,
     password: 123456
@@ -123,8 +129,9 @@ app.post('/newPlanning', function (req, res) {
         sessionId: Math.floor(Math.random() * 100) + 100,
         title: title,
         username: username,
-        isPrivate,
-        password: password
+        isPrivate: isPrivate,
+        password: password,
+        adminToken: '1234'
     };
 
     createPlanningSession(data)
@@ -151,8 +158,8 @@ app.post('/joinSession', function (req, res) {
         }
         else if (session.sessionConfig.isPrivate == false) {
             res.json({ message: 'successss' });
-        }else{
-            res.json({message:'asdasd'});
+        } else {
+            res.json({ message: 'asdasd' });
         }
 
     } else {

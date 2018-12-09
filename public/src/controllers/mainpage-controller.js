@@ -8,10 +8,14 @@ angular.module('mainpage-controller', [])
             username: ''
         }
 
+        $scope.createMessage = 'asdsad';
+
         $scope.newSession = function () {
             $http.post('/newPlanning', $scope.create)
                 .then(function (res) {
-                    console.log(res.data);
+                    authService.isLoggedIn = true;
+                    authService.userData = res.data;
+                    $location.path('/planningsession/' + authService.userData.sessionId);
                 }, function (err) {
                     console.log(err.data);
                 });
@@ -25,6 +29,8 @@ angular.module('mainpage-controller', [])
             password: ''
         };
 
+        $scope.joinMessage = '';
+
         $scope.joinSession = function () {
 
             $http.post('/joinSession', $scope.join)
@@ -32,9 +38,10 @@ angular.module('mainpage-controller', [])
                     console.log(res.data);
                     authService.isLoggedIn = true;
                     authService.userData = $scope.join;
-                    $location.path('/planningsession/' + authService.userData.sessionId );
+                    $location.path('/planningsession/' + authService.userData.sessionId);
                 }, function (err) {
                     console.log(err.data);
+                    $scope.joinMessage = err.data.message;
                 });
 
         }
