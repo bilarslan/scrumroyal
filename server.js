@@ -40,10 +40,7 @@ function createPlanningSession(params) {
         users: []
     }
 
-
     sessions.push(group);
-
-
 
     group.on('connection', function (socket) {
 
@@ -60,9 +57,10 @@ function createPlanningSession(params) {
             if (session.sessionConfig.isPrivate == true) {
                 if (session.sessionConfig.password == password) {
                     socket.username = username;
-                    group.sessionConfig.users.push({ id: socket.id, username: username });
+                    session.sessionConfig.users.push({ id: socket.id, username: username });
                     console.log('User connected ' + socket.username);
-                    group.emit('user.connect', { 'username': socket.username, users: group.sessionConfig.users });
+                    socket.emit('user.info', { 'title': session.sessionConfig.title });
+                    group.emit('user.connect', { 'username': socket.username, users: session.sessionConfig.users });
                 }
                 else {
                     socket.disconnect(true);
@@ -71,9 +69,10 @@ function createPlanningSession(params) {
             }
             else {
                 socket.username = username;
-                group.sessionConfig.users.push({ id: socket.id, username: username });
+                session.sessionConfig.users.push({ id: socket.id, username: username });
                 console.log('User connected ' + socket.username);
-                group.emit('user.connect', { 'username': socket.username, users: group.sessionConfig.users });
+                socket.emit('user.info', { 'title': session.sessionConfig.title });
+                group.emit('user.connect', { 'username': socket.username, users: session.sessionConfig.users });
             }
         }
         else {
@@ -95,7 +94,7 @@ function createPlanningSession(params) {
                 console.log('session is not found!');
             }
             console.log('User disconnected ' + socket.username + ' from ' + groupName);
-            group.emit('user.disconnect', { 'username': socket.username, users: group.sessionConfig.users });
+            group.emit('user.disconnect', { 'username': socket.username, users: session.sessionConfig.users });
         });
 
     });

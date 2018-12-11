@@ -1,17 +1,18 @@
 angular.module('planningsessionpage-controller', [])
-    .controller('planningsession-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService ) {
+    .controller('planningsession-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService) {
 
-        
-        if(authService.isLoggedIn == false){
+
+        if (authService.isLoggedIn == false) {
             return;
         }
-        
+
         var id = authService.userData.sessionId;
         var username = authService.userData.username;
         var password = authService.userData.password;
-        
+
         console.log(id, username, password);
 
+        $scope.title = '';
         $scope.users = [];
 
         socket = io('/group-' + id, { query: "username=" + username + "&" + "password=" + password });
@@ -20,6 +21,15 @@ angular.module('planningsessionpage-controller', [])
             $scope.users = data.users;
             $scope.$apply();
             console.log('User connected', $scope.users);
+        });
+
+        socket.on('user.info', function (data) {
+            $scope.title = data.title;
+            console.log(data);
+        });
+
+        socket.on('server.info', function (data) {
+            console.log(data);
         });
 
         socket.on('user.disconnect', function (data) {
