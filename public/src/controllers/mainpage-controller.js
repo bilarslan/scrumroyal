@@ -13,7 +13,7 @@ angular.module('mainpage-controller', [])
         $scope.newSession = function () {
             $http.post('/newPlanning', $scope.create)
                 .then(function (res) {
-                    authService.isLoggedIn = true;
+                    authService.isInitialized = true;
                     authService.userData = res.data;
                     $location.path('/planningsession/' + authService.userData.sessionId);
                 }, function (err) {
@@ -33,7 +33,7 @@ angular.module('mainpage-controller', [])
 
         $scope.joinSession = function () {
 
-            authService.isLoggedIn = true;
+            authService.isInitialized = true;
             authService.userData = $scope.join;
             $location.path('/planningsession/' + authService.userData.sessionId);
         }

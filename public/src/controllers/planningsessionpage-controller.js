@@ -4,7 +4,8 @@ angular.module('planningsessionpage-controller', [])
         $scope.title = '';
         $scope.users = [];
 
-        $scope.isLoggedIn = authService.isLoggedIn;
+        $scope.isInitialized = authService.isInitialized;
+        $scope.isLoggedIn = false;
 
         $scope.join = {
             sessionId: '',
@@ -13,7 +14,7 @@ angular.module('planningsessionpage-controller', [])
             password: ''
         };
 
-        if (authService.isLoggedIn == true) {
+        if (authService.isInitialized == true) {
             joinRequest(authService.userData);
         }
 
@@ -26,9 +27,10 @@ angular.module('planningsessionpage-controller', [])
             $http.post('/joinSession', data)
                 .then(function (res) {
                     initializeSocket(authService.userData);
+                    $scope.isLoggedIn =  $scope.isInitialized = true;
                 }, function (err) {
                     console.log(err.data);
-                    $scope.isLoggedIn = authService.isLoggedIn = false;
+                    $scope.isLoggedIn =  $scope.isInitialized = false;
                 });
         }
 
@@ -37,7 +39,7 @@ angular.module('planningsessionpage-controller', [])
             socket = io('/group-' + data.sessionId, { query: "username=" + data.username + "&" + "password=" + data.password });
 
             socket.on('user.connect', function (data) {
-                $scope.isLoggedIn = true;
+                $scope.isLoggedIn =  $scope.isInitialized = true;
                 $scope.users = data.users;
                 $scope.$apply();
                 console.log('User connected', $scope.users);
