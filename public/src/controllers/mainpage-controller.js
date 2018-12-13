@@ -33,17 +33,9 @@ angular.module('mainpage-controller', [])
 
         $scope.joinSession = function () {
 
-            $http.post('/joinSession', $scope.join)
-                .then(function (res) {
-                    console.log(res.data);
-                    authService.isLoggedIn = true;
-                    authService.userData = $scope.join;
-                    $location.path('/planningsession/' + authService.userData.sessionId);
-                }, function (err) {
-                    console.log(err.data);
-                    $scope.joinMessage = err.data.message;
-                });
-
+            authService.isLoggedIn = true;
+            authService.userData = $scope.join;
+            $location.path('/planningsession/' + authService.userData.sessionId);
         }
 
     }]);
