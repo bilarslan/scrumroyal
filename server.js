@@ -1,10 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var jwt = require('jsonwebtoken');
 var morgan = require('morgan');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 //var socket = require('./modules/socket.js').socket(io);
+
+var secretKey = 'sr-v/>3=BLm';
 
 var PORT = process.env.PORT || 3000;
 
@@ -44,57 +47,53 @@ function createPlanningSession(params) {
 
     group.on('connection', function (socket) {
 
-        var username = socket.handshake.query['username'];
-        var password = socket.handshake.query['password'];
-        var adminToken = socket.handshake.query['adminToken'];
-
-        var groupName = socket.nsp.name;
-
-        console.log(username, password, adminToken, groupName);
-
-        var session = sessions.find(x => x.name == groupName);
-        if (session) {
-            if (session.sessionConfig.isPrivate == true) {
-                if (session.sessionConfig.password == password) {
-                    socket.username = username;
-                    session.sessionConfig.users.push({ id: socket.id, username: username });
-                    console.log('User connected ' + socket.username);
-                    socket.emit('user.info', { 'title': session.sessionConfig.title });
-                    group.emit('user.connect', { 'username': socket.username, users: session.sessionConfig.users });
-                }
-                else {
-                    socket.disconnect(true);
-                    return;
-                }
+        var token = socket.handshake.query['token'];
+        jwt.verify(token, secretKey, function (err, decoded) {
+            if (err) {
+                console.log(err);
+                return;
             }
-            else {
-                socket.username = username;
-                session.sessionConfig.users.push({ id: socket.id, username: username });
-                console.log('User connected ' + socket.username);
-                socket.emit('user.info', { 'title': session.sessionConfig.title });
-                group.emit('user.connect', { 'username': socket.username, users: session.sessionConfig.users });
-            }
-        }
-        else {
-            console.log('session is not found!');
-        }
 
-        socket.on('disconnect', function (data) {
+            var username = decoded.username;
+            var groupName = socket.nsp.name;
 
             var session = sessions.find(x => x.name == groupName);
             if (session) {
-                var user = session.sessionConfig.users.find(x => x.id == socket.id);
-                if (user) {
-                    session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
-                } else {
-                    console.log('user is not found!');
-                }
+                socket.username = username;
+                session.sessionConfig.users.push({ id: socket.id, username: username });
+                socket.emit('user.connect', { 'title': session.sessionConfig.title });
+                group.emit('server.info', {
+                    action: 'CONNECT',
+                    username: socket.username,
+                    users: session.sessionConfig.users
+                });
             }
             else {
                 console.log('session is not found!');
             }
-            console.log('User disconnected ' + socket.username + ' from ' + groupName);
-            group.emit('user.disconnect', { 'username': socket.username, users: session.sessionConfig.users });
+
+            socket.on('disconnect', function (data) {
+
+                var session = sessions.find(x => x.name == groupName);
+                if (session) {
+                    var user = session.sessionConfig.users.find(x => x.id == socket.id);
+                    if (user) {
+                        session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
+                    } else {
+                        console.log('user is not found!');
+                    }
+                }
+                else {
+                    console.log('session is not found!');
+                }
+                console.log('User disconnected ' + socket.username + ' from ' + groupName);
+                group.emit('server.info', {
+                    action: 'DISCONNECT',
+                    'username': socket.username,
+                    users: session.sessionConfig.users
+                });
+            });
+
         });
 
     });
@@ -130,10 +129,10 @@ app.post('/newPlanning', function (req, res) {
         username: username,
         isPrivate: isPrivate,
         password: password,
-        adminToken: '1234'
     };
 
-    createPlanningSession(data)
+    createPlanningSession(data);
+
     res.json(data);
 });
 
@@ -152,12 +151,18 @@ app.post('/joinSession', function (req, res) {
         else if (session.sessionConfig.isPrivate == true && session.sessionConfig.password != password) {
             res.status(401).json({ message: "wrong password" });
         }
-        else if (session.sessionConfig.isPrivate == true && session.sessionConfig.password == password) {
-            res.json({ message: "successss" });
+        else if ((session.sessionConfig.isPrivate == false) || (session.sessionConfig.isPrivate == true && session.sessionConfig.password == password)) {
+
+            var token = jwt.sign({
+                sessionId: sessionId,
+                username: username
+            }, secretKey, {
+                    expiresIn: 60 * 24
+                });
+
+            res.json({ message: "successss", token: token });
         }
-        else if (session.sessionConfig.isPrivate == false) {
-            res.json({ message: 'successss' });
-        } else {
+        else {
             res.json({ message: 'asdasd' });
         }
 

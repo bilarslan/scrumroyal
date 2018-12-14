@@ -6,6 +6,7 @@ angular.module('planningsessionpage-controller', [])
 
         $scope.isInitialized = authService.isInitialized;
         $scope.isLoggedIn = false;
+        $scope.socketStatus = '';
 
         $scope.join = {
             sessionId: '',
@@ -14,8 +15,12 @@ angular.module('planningsessionpage-controller', [])
             password: ''
         };
 
-        if (authService.isInitialized == true) {
+        var sessionId = $routeParams.id;
+        var localData = authService.getData();
+        if (authService.isInitialized == true && authService.userData.sessionId == sessionId) {
             joinRequest(authService.userData);
+        } else if (localData.sessionId == sessionId && localData.token) {
+            initializeSocket(localData.sessionId, localData.token);
         }
 
         $scope.joinSession = function () {
@@ -26,22 +31,25 @@ angular.module('planningsessionpage-controller', [])
         function joinRequest(data) {
             $http.post('/joinSession', data)
                 .then(function (res) {
-                    initializeSocket(authService.userData);
-                    $scope.isLoggedIn =  $scope.isInitialized = true;
+                    console.log(res.data);
+                    authService.setData(data.sessionId, res.data.token);
+                    initializeSocket(data.sessionId, res.data.token);
+                    $scope.isLoggedIn = $scope.isInitialized = true;
                 }, function (err) {
                     console.log(err.data);
-                    $scope.isLoggedIn =  $scope.isInitialized = false;
+                    $scope.joinMessage = err.data.message;
+                    $scope.isLoggedIn = $scope.isInitialized = false;
                 });
         }
 
-        function initializeSocket(data) {
+        function initializeSocket(socketId, token) {
 
-            socket = io('/group-' + data.sessionId, { query: "username=" + data.username + "&" + "password=" + data.password });
+            socket = io('/group-' + socketId, { query: "token=" + token });
 
             socket.on('user.connect', function (data) {
-                $scope.isLoggedIn =  $scope.isInitialized = true;
-                $scope.users = data.users;
-                $scope.$apply();
+                $scope.title = data.title;
+                $scope.socketStatus = 'Connected';
+                $scope.isLoggedIn = $scope.isInitialized = true;
                 console.log('User connected', $scope.users);
             });
 
@@ -52,19 +60,27 @@ angular.module('planningsessionpage-controller', [])
 
             socket.on('server.info', function (data) {
                 console.log(data);
-            });
 
-            socket.on('user.disconnect', function (data) {
-                $scope.users = data.users;
-                $scope.$apply();
-                console.log('User disconnected', data);
+                var action = data.action;
+                if (action == 'CONNECT') {
+                    console.log(data.username + ' connected.');
+                    $scope.users = data.users;
+                    $scope.$apply();
+                }
+                else if (action == 'DISCONNECT') {
+                    console.log(data.username + ' disconnected');
+                    $scope.users = data.users;
+                    $scope.$apply();
+                }
             });
 
             socket.on('disconnect', function (data) {
+                $scope.socketStatus = 'Disconnected';
                 console.log(data);
             });
 
             socket.on('error', function (err) {
+                $scope.socketStatus = 'Disconnected';
                 console.log(err);
             });
 
