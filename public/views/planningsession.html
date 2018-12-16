@@ -1,4 +1,4 @@
-<div ng-show="!isInitialized">
+<div ng-show="!isLoggedIn">
 
     asdasds
 
@@ -30,7 +30,8 @@
     Users:
     <ul>
         <li ng-repeat="user in users track by $index">
-            {{user.username}}
+            <div><div ng-show={{user.isAdmin}}>★</div>{{user.username}}
+            <br>
         </li>
     </ul>
 

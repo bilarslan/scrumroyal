@@ -15,7 +15,7 @@ angular.module('planningsessionpage-controller', [])
             password: ''
         };
 
-        var sessionId = $routeParams.id;
+        var sessionId = $scope.join.sessionId = $routeParams.id;
         var localData = authService.getData();
         if (authService.isInitialized == true && authService.userData.sessionId == sessionId) {
             joinRequest(authService.userData);
@@ -46,15 +46,16 @@ angular.module('planningsessionpage-controller', [])
 
             socket = io('/group-' + socketId, { query: "token=" + token });
 
-            socket.on('user.connect', function (data) {
-                $scope.title = data.title;
-                $scope.socketStatus = 'Connected';
-                $scope.isLoggedIn = $scope.isInitialized = true;
-                console.log('User connected', $scope.users);
-            });
-
             socket.on('user.info', function (data) {
-                $scope.title = data.title;
+
+                var action = data.action;
+                if (action == 'CONNECT') {
+                    $scope.socketStatus = 'Connected.';
+                    $scope.title = data.title;
+                    $scope.isLoggedIn = true;
+                    $scope.isAdmin = data.isAdmin;
+                }
+
                 console.log(data);
             });
 

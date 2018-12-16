@@ -13,9 +13,8 @@ angular.module('mainpage-controller', [])
         $scope.newSession = function () {
             $http.post('/newPlanning', $scope.create)
                 .then(function (res) {
-                    authService.isInitialized = true;
-                    authService.userData = res.data;
-                    $location.path('/planningsession/' + authService.userData.sessionId);
+                    authService.setData(res.data.sessionId, res.data.token);
+                    $location.path('/planningsession/' + res.data.sessionId);
                 }, function (err) {
                     console.log(err.data);
                 });
@@ -32,7 +31,6 @@ angular.module('mainpage-controller', [])
         $scope.joinMessage = '';
 
         $scope.joinSession = function () {
-
             authService.isInitialized = true;
             authService.userData = $scope.join;
             $location.path('/planningsession/' + authService.userData.sessionId);

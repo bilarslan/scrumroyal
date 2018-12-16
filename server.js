@@ -26,19 +26,14 @@ var sessions = [];
 function createPlanningSession(params) {
 
     var sessionId = params.sessionId;
-    var username = params.username;
-    var isPrivate = params.isPrivate;
     var password = params.password;
     var title = params.title;
-    var adminToken = params.adminToken;
 
     var group = io.of('/group-' + sessionId);
 
     group.sessionConfig = {
         sessionId: sessionId,
         title: title,
-        adminToken: adminToken,
-        isPrivate: isPrivate,
         password: password,
         users: []
     }
@@ -51,17 +46,32 @@ function createPlanningSession(params) {
         jwt.verify(token, secretKey, function (err, decoded) {
             if (err) {
                 console.log(err);
+                socket.disconnect(true);
                 return;
             }
-
             var username = decoded.username;
-            var groupName = socket.nsp.name;
+            var isAdmin = decoded.isAdmin;
+            var groupName = group.name;
 
             var session = sessions.find(x => x.name == groupName);
             if (session) {
+                var user = session.sessionConfig.users.find(x => x.username == username);
+                if (user) {
+                    socket.disconnect(true);
+                    return;
+                }
+                socket.auth = true;
                 socket.username = username;
-                session.sessionConfig.users.push({ id: socket.id, username: username });
-                socket.emit('user.connect', { 'title': session.sessionConfig.title });
+                socket.isAdmin = isAdmin;
+                
+                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin });
+
+                socket.emit('user.info', {
+                    action: 'CONNECT',
+                    title: session.sessionConfig.title,
+                    isAdmin: isAdmin
+                });
+
                 group.emit('server.info', {
                     action: 'CONNECT',
                     username: socket.username,
@@ -69,7 +79,7 @@ function createPlanningSession(params) {
                 });
             }
             else {
-                console.log('session is not found!');
+                socket.disconnect(true);
             }
 
             socket.on('disconnect', function (data) {
@@ -89,7 +99,7 @@ function createPlanningSession(params) {
                 console.log('User disconnected ' + socket.username + ' from ' + groupName);
                 group.emit('server.info', {
                     action: 'DISCONNECT',
-                    'username': socket.username,
+                    username: socket.username,
                     users: session.sessionConfig.users
                 });
             });
@@ -103,8 +113,6 @@ function createPlanningSession(params) {
 var d = {
     sessionId: 26,
     title: 'DENEME',
-    username: 'bilarslan',
-    isPrivate: true,
     password: 123456
 }
 
@@ -115,7 +123,6 @@ app.post('/newPlanning', function (req, res) {
     var title = req.body.title;
     var password = req.body.password;
     var username = req.body.username;
-    var isPrivate = req.body.isPrivate;
 
     if (typeof title !== 'string' || typeof username !== 'string') {
         return res.status(400).json({
@@ -126,14 +133,23 @@ app.post('/newPlanning', function (req, res) {
     var data = {
         sessionId: Math.floor(Math.random() * 100) + 100,
         title: title,
-        username: username,
-        isPrivate: isPrivate,
         password: password,
     };
 
+    var token = jwt.sign({
+        sessionId: data.sessionId,
+        username: username,
+        isAdmin: true
+    }, secretKey, {
+            expiresIn: 60 * 24
+        });
+
     createPlanningSession(data);
 
-    res.json(data);
+    res.json({
+        sessionId: data.sessionId,
+        token: token,
+    });
 });
 
 app.post('/joinSession', function (req, res) {
@@ -141,17 +157,16 @@ app.post('/joinSession', function (req, res) {
     var username = req.body.username;
     var sessionId = req.body.sessionId;
     var password = req.body.password;
-
     var session = sessions.find(x => x.sessionConfig.sessionId == sessionId);
 
     if (session) {
-        if (session.sessionConfig.isPrivate == true && password == null) {
+        if (session.sessionConfig.password && password == 'null') {
             res.status(401).json({ message: "please password" });
         }
-        else if (session.sessionConfig.isPrivate == true && session.sessionConfig.password != password) {
+        else if (session.sessionConfig.password && session.sessionConfig.password != password) {
             res.status(401).json({ message: "wrong password" });
         }
-        else if ((session.sessionConfig.isPrivate == false) || (session.sessionConfig.isPrivate == true && session.sessionConfig.password == password)) {
+        else if ((session.sessionConfig.password == false) || (session.sessionConfig.password && session.sessionConfig.password == password)) {
 
             var token = jwt.sign({
                 sessionId: sessionId,
