@@ -3,9 +3,7 @@ angular.module('auth-service-module', [])
 
         var authFactory = {};
 
-        authFactory.isInitialized = false;
         authFactory.isLoggedIn = false;
-        authFactory.userData = {};
 
         authFactory.getData = function () {
             return {

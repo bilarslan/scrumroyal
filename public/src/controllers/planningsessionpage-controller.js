@@ -4,7 +4,6 @@ angular.module('planningsessionpage-controller', [])
         $scope.title = '';
         $scope.users = [];
 
-        $scope.isInitialized = authService.isInitialized;
         $scope.isLoggedIn = false;
         $scope.socketStatus = '';
 
@@ -17,15 +16,15 @@ angular.module('planningsessionpage-controller', [])
 
         var sessionId = $scope.join.sessionId = $routeParams.id;
         var localData = authService.getData();
-        if (authService.isInitialized == true && authService.userData.sessionId == sessionId) {
-            joinRequest(authService.userData);
-        } else if (localData.sessionId == sessionId && localData.token) {
+
+        if (localData.sessionId == sessionId && localData.token) {
             initializeSocket(localData.sessionId, localData.token);
+        } else {
+
         }
 
         $scope.joinSession = function () {
-            authService.userData = $scope.join;
-            joinRequest(authService.userData);
+            joinRequest($scope.join);
         }
 
         function joinRequest(data) {
@@ -34,11 +33,11 @@ angular.module('planningsessionpage-controller', [])
                     console.log(res.data);
                     authService.setData(data.sessionId, res.data.token);
                     initializeSocket(data.sessionId, res.data.token);
-                    $scope.isLoggedIn = $scope.isInitialized = true;
+                    $scope.isLoggedIn = true;
                 }, function (err) {
                     console.log(err.data);
                     $scope.joinMessage = err.data.message;
-                    $scope.isLoggedIn = $scope.isInitialized = false;
+                    $scope.isLoggedIn = false;
                 });
         }
 

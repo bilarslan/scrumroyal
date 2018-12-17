@@ -31,9 +31,15 @@ angular.module('mainpage-controller', [])
         $scope.joinMessage = '';
 
         $scope.joinSession = function () {
-            authService.isInitialized = true;
-            authService.userData = $scope.join;
-            $location.path('/planningsession/' + authService.userData.sessionId);
+            $http.post('/joinSession', $scope.join)
+                .then(function (res) {
+                    console.log(res.data);
+                    authService.setData($scope.join.sessionId, res.data.token);
+                    $location.path('/planningsession/' + $scope.join.sessionId);
+                }, function (err) {
+                    console.log(err.data);
+                    $scope.joinMessage = err.data.message;
+                });
         }
 
     }]);

@@ -30,7 +30,7 @@
     Users:
     <ul>
         <li ng-repeat="user in users track by $index">
-            <div><div ng-show={{user.isAdmin}}>★</div>{{user.username}}
+            <div><div ng-show='user.isAdmin'>★</div>{{user.username}}
             <br>
         </li>
     </ul>
