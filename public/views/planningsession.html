@@ -37,7 +37,11 @@
 
 
     <br>
+    <br>
 
+    <div ng-repeat="card in cards track by $index">
+        <input type="checkbox" ng-model="card.selected" ng-change="checkChanged(card)" ng-disabled="checked==limit && !card.selected"/> <span>{{card.value}}</span>
+    </div>>
 
 
 
