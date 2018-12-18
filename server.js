@@ -63,8 +63,8 @@ function createPlanningSession(params) {
                 socket.auth = true;
                 socket.username = username;
                 socket.isAdmin = isAdmin;
-                
-                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin });
+
+                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin, selectedCards: [] });
 
                 socket.emit('user.info', {
                     action: 'CONNECT',
@@ -82,13 +82,42 @@ function createPlanningSession(params) {
                 socket.disconnect(true);
             }
 
-            socket.on('disconnect', function (data) {
-
+            
+            socket.on('card.selected', function (data) {
+                var groupName = socket.nsp.name;
                 var session = sessions.find(x => x.name == groupName);
                 if (session) {
                     var user = session.sessionConfig.users.find(x => x.id == socket.id);
                     if (user) {
-                        session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
+                        if (data.selected == true) {
+                            user.selectedCards.push({ value: data.value });
+                        }
+                        else {
+                            var index = user.selectedCards.findIndex(x => x.value == data.value);
+                            user.selectedCards.splice(index, 1);
+                        }
+                    } else {
+                        console.log('user is not found!');
+                    }
+
+                }
+                else {
+                    console.log('Session is not found.');
+                }
+
+                //console.log(socket.username, data);
+            });
+
+            socket.on('disconnect', function (data) {
+
+                var groupName = socket.nsp.name;
+                var session = sessions.find(x => x.name == groupName);
+                if (session) {
+                    var user = session.sessionConfig.users.find(x => x.id == socket.id);
+                    if (user) {
+                        var index = session.sessionConfig.users.findIndex(x => x.username == socket.username);
+                        session.sessionConfig.users.splice(index, 1);
+                        //session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
                     } else {
                         console.log('user is not found!');
                     }

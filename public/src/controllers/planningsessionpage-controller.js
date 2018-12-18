@@ -1,6 +1,8 @@
 angular.module('planningsessionpage-controller', [])
     .controller('planningsession-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService) {
 
+        var socket;
+
         $scope.title = '';
         $scope.users = [];
 
@@ -17,7 +19,7 @@ angular.module('planningsessionpage-controller', [])
         $scope.info = [];
 
         $scope.checked = 0;
-        $scope.limit = 1;
+        $scope.limit = -1;
 
         $scope.cards = [{ value: 0, selected: false }, { value: 1, selected: false }, { value: 2, selected: false }, { value: 3, selected: false }, { value: 5, selected: false }, { value: 8, selected: false }, { value: 13, selected: false }, { value: 21, selected: false }, { value: 34, selected: false }, { value: 55, selected: false }, { value: 89, selected: false }];
 
@@ -91,11 +93,15 @@ angular.module('planningsessionpage-controller', [])
                 console.log(err);
             });
 
+            $scope.checkChanged = function (item) {
+                if (item.selected) $scope.checked++;
+                else $scope.checked--;
+
+                socket.emit('card.selected', item);
+            }
+
         }
 
-        $scope.checkChanged = function(item){
-            if(item.selected) $scope.checked++;
-            else $scope.checked--;
-        }
+
 
     }]);
