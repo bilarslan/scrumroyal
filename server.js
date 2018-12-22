@@ -57,6 +57,7 @@ function createPlanningSession(params) {
             if (session) {
                 var user = session.sessionConfig.users.find(x => x.username == username);
                 if (user) {
+                    //Same username
                     socket.disconnect(true);
                     return;
                 }
@@ -82,20 +83,15 @@ function createPlanningSession(params) {
                 socket.disconnect(true);
             }
 
-            
+
             socket.on('card.selected', function (data) {
                 var groupName = socket.nsp.name;
                 var session = sessions.find(x => x.name == groupName);
                 if (session) {
                     var user = session.sessionConfig.users.find(x => x.id == socket.id);
                     if (user) {
-                        if (data.selected == true) {
-                            user.selectedCards.push({ value: data.value });
-                        }
-                        else {
-                            var index = user.selectedCards.findIndex(x => x.value == data.value);
-                            user.selectedCards.splice(index, 1);
-                        }
+                        user.selectedCards = data;
+                        socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
                     } else {
                         console.log('user is not found!');
                     }

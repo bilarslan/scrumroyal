@@ -36,6 +36,13 @@ angular.module('planningsessionpage-controller', [])
             joinRequest($scope.join);
         }
 
+        $scope.checkChanged = function (item) {
+            if (item.selected)
+                $scope.checked++;
+            else
+                $scope.checked--;
+        }
+
         function joinRequest(data) {
             $http.post('/joinSession', data)
                 .then(function (res) {
@@ -61,6 +68,9 @@ angular.module('planningsessionpage-controller', [])
                     $scope.title = data.title;
                     $scope.isLoggedIn = true;
                     $scope.isAdmin = data.isAdmin;
+                }
+                else if (action == 'CARD.SELECTED') {
+                    console.log(data.selectedCards);
                 }
 
                 console.log(data);
@@ -93,15 +103,17 @@ angular.module('planningsessionpage-controller', [])
                 console.log(err);
             });
 
-            $scope.checkChanged = function (item) {
-                if (item.selected) $scope.checked++;
-                else $scope.checked--;
+            $scope.confimCardSelection = function () {
+                console.log('clicked!');
+                var cards = $scope.cards.filter(x => x.selected == true);
+                if (cards) {
 
-                socket.emit('card.selected', item);
+                    socket.emit('card.selected', cards);
+                }
             }
 
+
+
         }
-
-
 
     }]);
