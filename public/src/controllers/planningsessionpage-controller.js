@@ -21,7 +21,11 @@ angular.module('planningsessionpage-controller', [])
         $scope.checked = 0;
         $scope.limit = -1;
 
-        $scope.cards = [{ value: 0, selected: false }, { value: 1, selected: false }, { value: 2, selected: false }, { value: 3, selected: false }, { value: 5, selected: false }, { value: 8, selected: false }, { value: 13, selected: false }, { value: 21, selected: false }, { value: 34, selected: false }, { value: 55, selected: false }, { value: 89, selected: false }];
+        var cards = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
+        $scope.cards = [];
+        cards.forEach(function (element) {
+            $scope.cards.push({ value: element, selected: false, confirmed: false });
+        });
 
         var sessionId = $scope.join.sessionId = $routeParams.id;
         var localData = authService.getData();
@@ -71,9 +75,17 @@ angular.module('planningsessionpage-controller', [])
                 }
                 else if (action == 'CARD.SELECTED') {
                     console.log(data.selectedCards);
-                }
+                    $scope.cards.forEach(function (element) {
+                        var confirmedCard = data.selectedCards.find(x => x.value == element.value);
+                        if (confirmedCard) {
+                            element.selected = element.confirmed = true;
+                        } else {
+                            element.selected = element.confirmed = false;
+                        }
+                    });
 
-                console.log(data);
+                    $scope.$apply();
+                }
             });
 
             socket.on('server.info', function (data) {
@@ -104,10 +116,8 @@ angular.module('planningsessionpage-controller', [])
             });
 
             $scope.confimCardSelection = function () {
-                console.log('clicked!');
-                var cards = $scope.cards.filter(x => x.selected == true);
+                var cards = $scope.cards.filter(x => x.selected == true).map(x => { var obj = {}; obj['value'] = x.value; return obj; });
                 if (cards) {
-
                     socket.emit('card.selected', cards);
                 }
             }
