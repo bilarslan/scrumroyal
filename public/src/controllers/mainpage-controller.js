@@ -4,6 +4,7 @@ angular.module('mainpage-controller', [])
         $scope.create = {
             title: '',
             isPrivate: false,
+            cardLimit: false,
             password: '',
             username: ''
         }
@@ -33,7 +34,6 @@ angular.module('mainpage-controller', [])
         $scope.joinSession = function () {
             $http.post('/joinSession', $scope.join)
                 .then(function (res) {
-                    console.log(res.data);
                     authService.setData($scope.join.sessionId, res.data.token);
                     $location.path('/planningsession/' + $scope.join.sessionId);
                 }, function (err) {

@@ -28,6 +28,7 @@ function createPlanningSession(params) {
     var sessionId = params.sessionId;
     var password = params.password;
     var title = params.title;
+    var cardLimit = params.cardLimit;
 
     var group = io.of('/group-' + sessionId);
 
@@ -35,6 +36,7 @@ function createPlanningSession(params) {
         sessionId: sessionId,
         title: title,
         password: password,
+        cardLimit: cardLimit,
         users: []
     }
 
@@ -51,6 +53,7 @@ function createPlanningSession(params) {
             }
             var username = decoded.username;
             var isAdmin = decoded.isAdmin;
+
             var groupName = group.name;
 
             var session = sessions.find(x => x.name == groupName);
@@ -70,6 +73,7 @@ function createPlanningSession(params) {
                 socket.emit('user.info', {
                     action: 'CONNECT',
                     title: session.sessionConfig.title,
+                    cardLimit: session.sessionConfig.cardLimit,
                     isAdmin: isAdmin
                 });
 
@@ -138,7 +142,8 @@ function createPlanningSession(params) {
 var d = {
     sessionId: 26,
     title: 'DENEME',
-    password: 123456
+    password: 123456,
+    cardLimit: -1
 }
 
 createPlanningSession(d);
@@ -148,6 +153,7 @@ app.post('/newPlanning', function (req, res) {
     var title = req.body.title;
     var password = req.body.password;
     var username = req.body.username;
+    var cardLimit = req.body.cardLimit;
 
     if (typeof title !== 'string' || typeof username !== 'string') {
         return res.status(400).json({
@@ -155,10 +161,17 @@ app.post('/newPlanning', function (req, res) {
         });
     }
 
+    if (cardLimit) {
+        cardLimit = 1;
+    }else{
+        cardLimit = -1;
+    }
+
     var data = {
         sessionId: Math.floor(Math.random() * 100) + 100,
         title: title,
         password: password,
+        cardLimit: cardLimit
     };
 
     var token = jwt.sign({
