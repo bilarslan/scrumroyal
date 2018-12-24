@@ -8,6 +8,11 @@ NEW SESSION
     <br><label for="create.password" ng-show="create.isPrivate">Password: </label><input type="password" ng-model="create.password" name="create.password" ng-required="create.isPrivate" ng-show="create.isPrivate" />
     
 
+    <select ng-model="create.cardSet">
+        <option ng-repeat="set in cardSet track by $index" ng-value="$index">{{set.type}}</option>
+    </select>
+
+
     <br></be><label>CardLimit:
         <input type="checkbox" ng-model="create.cardLimit">
     </label>

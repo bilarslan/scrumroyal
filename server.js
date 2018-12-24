@@ -29,6 +29,7 @@ function createPlanningSession(params) {
     var password = params.password;
     var title = params.title;
     var cardLimit = params.cardLimit;
+    var cardSet = params.cardSet;
 
     var group = io.of('/group-' + sessionId);
 
@@ -37,6 +38,7 @@ function createPlanningSession(params) {
         title: title,
         password: password,
         cardLimit: cardLimit,
+        cardSet: cardSet,
         users: []
     }
 
@@ -74,6 +76,7 @@ function createPlanningSession(params) {
                     action: 'CONNECT',
                     title: session.sessionConfig.title,
                     cardLimit: session.sessionConfig.cardLimit,
+                    cardSet: session.sessionConfig.cardSet,
                     isAdmin: isAdmin
                 });
 
@@ -154,6 +157,7 @@ app.post('/newPlanning', function (req, res) {
     var password = req.body.password;
     var username = req.body.username;
     var cardLimit = req.body.cardLimit;
+    var cardSet = req.body.cardSet;
 
     if (typeof title !== 'string' || typeof username !== 'string') {
         return res.status(400).json({
@@ -163,7 +167,7 @@ app.post('/newPlanning', function (req, res) {
 
     if (cardLimit) {
         cardLimit = 1;
-    }else{
+    } else {
         cardLimit = -1;
     }
 
@@ -171,7 +175,8 @@ app.post('/newPlanning', function (req, res) {
         sessionId: Math.floor(Math.random() * 100) + 100,
         title: title,
         password: password,
-        cardLimit: cardLimit
+        cardLimit: cardLimit,
+        cardSet: cardSet
     };
 
     var token = jwt.sign({
