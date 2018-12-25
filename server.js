@@ -83,7 +83,13 @@ function createPlanningSession(params) {
                 group.emit('server.info', {
                     action: 'CONNECT',
                     username: socket.username,
-                    users: session.sessionConfig.users
+                    users: session.sessionConfig.users.map(x => {
+                        var obj = {};
+                        obj['username'] = x.username;
+                        obj['isAdmin'] = x.isAdmin;
+                        obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
+                        return obj;
+                    })
                 });
             }
             else {
@@ -119,8 +125,6 @@ function createPlanningSession(params) {
                 else {
                     console.log('Session is not found.');
                 }
-
-                //console.log(socket.username, data);
             });
 
             socket.on('disconnect', function (data) {
@@ -140,12 +144,19 @@ function createPlanningSession(params) {
                 else {
                     console.log('session is not found!');
                 }
-                console.log('User disconnected ' + socket.username + ' from ' + groupName);
+
                 group.emit('server.info', {
                     action: 'DISCONNECT',
                     username: socket.username,
-                    users: session.sessionConfig.users
+                    users: session.sessionConfig.users.map(x => {
+                        var obj = {};
+                        obj['username'] = x.username;
+                        obj['isAdmin'] = x.isAdmin;
+                        obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
+                        return obj;
+                    })
                 });
+
             });
 
         });
