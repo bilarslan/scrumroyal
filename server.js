@@ -97,16 +97,18 @@ function createPlanningSession(params) {
                 if (session) {
                     var user = session.sessionConfig.users.find(x => x.id == socket.id);
                     if (user) {
-
-
                         var action = data.action;
                         if (action == 'SELECTION') {
                             user.selectedCards = data.cards;
                             socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
+                            if (user.selectedCards.length > 0) {
+                                group.emit('server.info', { action: 'CARD.SELECTED', username: socket.username, cardSelected: true });
+                            }
                         }
                         else if (action == 'RESET') {
                             user.selectedCards = [];
                             socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
+                            group.emit('server.info', { action: 'CARD.SELECTED', username: socket.username, cardSelected: false });
                         }
 
                     } else {

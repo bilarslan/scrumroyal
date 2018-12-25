@@ -109,6 +109,12 @@ angular.module('planningsessionpage-controller', [])
                     $scope.users = data.users;
                     $scope.info.push(data.username + ' is disconnected.');
                 }
+                else if (action == 'CARD.SELECTED') {
+                    var user = $scope.users.find(x => x.username == data.username);
+                    if (user) {
+                        user.cardSelected = data.cardSelected;
+                    }
+                }
                 $scope.$apply();
             });
 
