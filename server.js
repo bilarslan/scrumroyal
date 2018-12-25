@@ -91,14 +91,24 @@ function createPlanningSession(params) {
             }
 
 
-            socket.on('card.selected', function (data) {
+            socket.on('card.action', function (data) {
                 var groupName = socket.nsp.name;
                 var session = sessions.find(x => x.name == groupName);
                 if (session) {
                     var user = session.sessionConfig.users.find(x => x.id == socket.id);
                     if (user) {
-                        user.selectedCards = data;
-                        socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
+
+
+                        var action = data.action;
+                        if (action == 'SELECTION') {
+                            user.selectedCards = data.cards;
+                            socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
+                        }
+                        else if (action == 'RESET') {
+                            user.selectedCards = [];
+                            socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
+                        }
+
                     } else {
                         console.log('user is not found!');
                     }
@@ -146,7 +156,8 @@ var d = {
     sessionId: 26,
     title: 'DENEME',
     password: 123456,
-    cardLimit: -1
+    cardLimit: -1,
+    cardSet: 0
 }
 
 createPlanningSession(d);

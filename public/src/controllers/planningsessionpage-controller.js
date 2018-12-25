@@ -25,6 +25,11 @@ angular.module('planningsessionpage-controller', [])
         $scope.cards = [];
 
 
+        var cardSet = [
+            { type: ["0", "1", "3", "5", "8", "13", "20", "40", "100", "?", "∞"] },
+            { type: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89"] }
+        ];
+
         var sessionId = $scope.join.sessionId = $routeParams.id;
         var localData = authService.getData();
 
@@ -70,12 +75,13 @@ angular.module('planningsessionpage-controller', [])
                     $scope.socketStatus = 'Connected.';
                     $scope.title = data.title;
                     $scope.isAdmin = data.isAdmin;
-                    var cards = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-                    buildCards(cards, data.cardLimit);
+                    var index = data.cardSet;
+                    buildCards(cardSet[index].type, data.cardLimit);
                     $scope.isLoggedIn = true;
                 }
                 else if (action == 'CARD.SELECTED') {
                     console.log(data.selectedCards);
+                    $scope.checked = data.selectedCards.length;
                     $scope.cards.forEach(function (element) {
                         var confirmedCard = data.selectedCards.find(x => x.value == element.value);
                         if (confirmedCard) {
@@ -119,8 +125,12 @@ angular.module('planningsessionpage-controller', [])
             $scope.confimCardSelection = function () {
                 var cards = $scope.cards.filter(x => x.selected == true).map(x => { var obj = {}; obj['value'] = x.value; return obj; });
                 if (cards) {
-                    socket.emit('card.selected', cards);
+                    socket.emit('card.action', { action: 'SELECTION', cards: cards });
                 }
+            }
+
+            $scope.resetCardSelection = function () {
+                socket.emit('card.action', { action: 'RESET' });
             }
         }
 
