@@ -25,13 +25,15 @@
 <div ng-show="isLoggedIn">
     {{title}}
 
-    <br>
 
-    Users:
+    <br>
+    CARDS:
     <ul>
         <li ng-repeat="user in users track by $index">
-            <div><div ng-show='user.isAdmin'>★</div>  <span ng-style="{color: (user.cardSelected == true) ? 'red' : 'black'};"> {{user.username}} </span>
-            <br>
+            <div>
+                <span ng-style="{color: (user.cardSelected == true) ? 'red' : 'black'};">
+                    {{user.username}} </span> - <span>{{user.score}}</span>
+                <br>
         </li>
     </ul>
 
@@ -40,22 +42,40 @@
     <br>
 
     <div ng-repeat="card in cards track by $index">
-        <input type="checkbox" ng-model="card.selected" ng-change="checkChanged(card)" ng-disabled="checked==limit && !card.selected"/> <span ng-style="{color: (card.confirmed == true) ? 'red' : 'black'};">{{card.value}}</span>
-    </div>>
+        <input type="checkbox" ng-model="card.selected" ng-change="checkChanged(card)" ng-disabled="checked==limit && !card.selected" />
+        <span ng-style="{color: (card.confirmed == true) ? 'red' : 'black'};">{{card.value}}</span>
+    </div>
+
+    <br>
 
     <button type="button" ng-click="confimCardSelection()">Confim Card Selection!</button>
 
     <button type="button" ng-click="resetCardSelection()">Reset Card Selection!</button>
 
+    <button type="button" ng-click="openCards()" ng-show="isAdmin">Open Cards!</button>
+
+    <br>
+
+    Users:
+    <ul>
+        <li ng-repeat="user in users track by $index">
+            <div>
+                <div ng-show='user.isAdmin'>★</div> <span>
+                    {{user.username}} </span>
+                <br>
+        </li>
+    </ul>
 
 
 
+
+    <br><br><br>
     Info:
     <ul>
         <li ng-repeat="item in info track by $index">
-          <span>{{item}}</span>
+            <span>{{item}}</span>
         </li>
-      </ul>
+    </ul>
 
 
 

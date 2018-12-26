@@ -96,7 +96,7 @@ angular.module('planningsessionpage-controller', [])
             });
 
             socket.on('server.info', function (data) {
-                console.log(data);
+                //console.log(data);
 
                 var action = data.action;
                 if (action == 'CONNECT') {
@@ -114,6 +114,19 @@ angular.module('planningsessionpage-controller', [])
                     if (user) {
                         user.cardSelected = data.cardSelected;
                     }
+                }
+                else if (action == 'CARD.OPEN') {
+                    console.log(data);
+                    $scope.users.forEach(function (user) {
+                        var userData = data.users.find(x => x.username == user.username);
+                        if (userData) {
+                            var sum = 0;
+                            userData.selectedCards.forEach(function (card) {
+                                sum += parseInt(card.value);
+                            });
+                        }
+                        user.score = sum;
+                    });
                 }
                 $scope.$apply();
             });
@@ -137,6 +150,14 @@ angular.module('planningsessionpage-controller', [])
 
             $scope.resetCardSelection = function () {
                 socket.emit('card.action', { action: 'RESET' });
+            }
+
+            $scope.openCards = function () {
+                if ($scope.isAdmin) {
+                    socket.emit('card.action', { action: 'OPEN' });
+                } else {
+                    console.log('you are not admin');
+                }
             }
         }
 

@@ -70,7 +70,7 @@ function createPlanningSession(params) {
                 socket.username = username;
                 socket.isAdmin = isAdmin;
 
-                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin, selectedCards: [] });
+                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin, selectedCards: [], score: -1 });
 
                 socket.emit('user.info', {
                     action: 'CONNECT',
@@ -88,6 +88,7 @@ function createPlanningSession(params) {
                         obj['username'] = x.username;
                         obj['isAdmin'] = x.isAdmin;
                         obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
+                        obj['score'] = x.score;
                         return obj;
                     })
                 });
@@ -113,6 +114,11 @@ function createPlanningSession(params) {
                             user.selectedCards = [];
                             socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
                             group.emit('server.info', { action: 'CARD.SELECTED', username: socket.username, cardSelected: false });
+                        }
+                        else if (action == 'OPEN') {
+                            if (socket.isAdmin) {
+                                group.emit('server.info', { action: 'CARD.OPEN', users: session.sessionConfig.users });
+                            }
                         }
 
                     } else {
@@ -151,6 +157,7 @@ function createPlanningSession(params) {
                         obj['username'] = x.username;
                         obj['isAdmin'] = x.isAdmin;
                         obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
+                        obj['score'] = x.score;
                         return obj;
                     })
                 });
