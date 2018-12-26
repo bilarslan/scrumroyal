@@ -107,9 +107,7 @@ function createPlanningSession(params) {
                         if (action == 'SELECTION') {
                             user.selectedCards = data.cards;
                             socket.emit('user.info', { action: 'CARD.SELECTED', selectedCards: user.selectedCards });
-                            if (user.selectedCards.length > 0) {
-                                group.emit('server.info', { action: 'CARD.SELECTED', username: socket.username, cardSelected: true });
-                            }
+                            group.emit('server.info', { action: 'CARD.SELECTED', username: socket.username, cardSelected: (user.selectedCards.length > 0 ? true : false) });
                         }
                         else if (action == 'RESET') {
                             user.selectedCards = [];
