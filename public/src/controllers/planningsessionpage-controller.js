@@ -58,7 +58,7 @@ angular.module('planningsessionpage-controller', [])
                 $scope.checked--;
                 if (item.specialCard == true) {
                     $scope.lockAll = false;
-                }else{
+                } else {
                     $scope.lockSpecial = false;
                 }
             }
@@ -96,6 +96,10 @@ angular.module('planningsessionpage-controller', [])
                 else if (action == 'CARD.SELECTED') {
                     console.log(data.selectedCards);
                     $scope.checked = data.selectedCards.length;
+                    if (data.selectedCards.length == 0) {
+                        $scope.lockAll = false;
+                        $scope.lockSpecial = false;
+                    }
                     $scope.cards.forEach(function (element) {
                         var confirmedCard = data.selectedCards.find(x => x.value == element.value);
                         if (confirmedCard) {
@@ -136,7 +140,11 @@ angular.module('planningsessionpage-controller', [])
                         if (userData) {
                             var sum = 0;
                             userData.selectedCards.forEach(function (card) {
-                                sum += parseInt(card.value);
+                                if (card.value == "?" || card.value == "∞") {
+                                    sum = card.value;
+                                } else {
+                                    sum += parseInt(card.value);
+                                }
                             });
                         }
                         user.score = sum;
