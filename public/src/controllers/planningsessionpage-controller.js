@@ -24,6 +24,8 @@ angular.module('planningsessionpage-controller', [])
 
         $scope.cards = [];
 
+        $scope.lockAll = false;
+        $scope.lockSpecial = false;
 
         var cardSet = [
             { type: ["0", "1", "3", "5", "8", "13", "20", "40", "100", "?", "∞"] },
@@ -44,10 +46,22 @@ angular.module('planningsessionpage-controller', [])
         }
 
         $scope.checkChanged = function (item) {
-            if (item.selected)
+            if (item.selected) {
                 $scope.checked++;
-            else
+                if (item.specialCard == true) {
+                    $scope.lockAll = true;
+                } else {
+                    $scope.lockSpecial = true;
+                }
+            }
+            else {
                 $scope.checked--;
+                if (item.specialCard == true) {
+                    $scope.lockAll = false;
+                }else{
+                    $scope.lockSpecial = false;
+                }
+            }
         }
 
         function joinRequest(data) {
@@ -165,7 +179,7 @@ angular.module('planningsessionpage-controller', [])
             $scope.cards = [];
             $scope.limit = cardLimit;
             cards.forEach(function (element) {
-                $scope.cards.push({ value: element, selected: false, confirmed: false });
+                $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞") });
             });
         }
 
