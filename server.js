@@ -200,8 +200,15 @@ app.post('/newPlanning', function (req, res) {
         cardLimit = -1;
     }
 
+    var sessionId;
+    do {
+        sessionId = Math.floor(Math.random() * 1000) + 1000;
+        var isFound = sessions.findIndex(x => x.sessionConfig.sessionId == sessionId);
+        console.log(sessionId, isFound);
+    } while (isFound != -1);
+
     var data = {
-        sessionId: Math.floor(Math.random() * 100) + 100,
+        sessionId: sessionId,
         title: title,
         password: password,
         cardLimit: cardLimit,
