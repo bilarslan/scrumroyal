@@ -1,1 +1,1 @@
-angular.module('sr-app', ['sr-app-routes', 'auth-service-module', 'mainpage-module', 'planningsessionpage-module']);
+angular.module('sr-app', ['sr-app-routes', 'auth-service-module', 'mainpage-module', 'createpage-module', 'joinpage-module','planningsessionpage-module']);
