@@ -4,11 +4,11 @@ angular.module('sr-app-routes', ['ngRoute'])
         $routeProvider
             .when('/', {
                 templateUrl: '../views/main.html',
-                controller: 'main-controller'
+                controller: 'mainpage-controller'
             })
             .when('/planningsession/:id', {
                 templateUrl: '../views/planningsession.html',
-                controller: 'planningsession-controller'
+                controller: 'planningsessionpage-controller'
             });
 
     });

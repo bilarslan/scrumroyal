@@ -1,5 +1,5 @@
-angular.module('planningsessionpage-controller', [])
-    .controller('planningsession-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService) {
+angular.module('planningsessionpage-module', [])
+    .controller('planningsessionpage-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService) {
 
         var socket;
 

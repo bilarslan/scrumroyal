@@ -1,5 +1,5 @@
-angular.module('mainpage-controller', [])
-    .controller('main-controller', ['$scope', '$http', '$location', 'authService', function ($scope, $http, $location, authService) {
+angular.module('mainpage-module', [])
+    .controller('mainpage-controller', ['$scope', '$http', '$location', 'authService', function ($scope, $http, $location, authService) {
 
         $scope.cardSet = [
             { type: "0, 1, 3, 5, 8, 13, 20, 40, 100, ?, ∞" },
