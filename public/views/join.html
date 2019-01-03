@@ -3,28 +3,32 @@
         <div class="content">
             <h3>Join Session</h3>
             <hr />
-            <form>
+            <form ng-submit="joinSession()">
                 <div class="form-group">
                     <label for="inputSessionID">Session ID</label>
-                    <input type="text" class="form-control" id="inputSessionName" placeholder="Enter session id">
+                    <input type="text" class="form-control" id="inputSessionID" placeholder="Enter session id" ng-model="join.sessionId" ng-required="true">
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="checkIsPrivate">
+                    <input type="checkbox" class="form-check-input" id="checkIsPrivate" ng-model="join.isPrivate">
                     <label class="form-check-label" for="checkIsPrivate">Password Protection</label>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-show="join.isPrivate">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Enter password">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Enter password" ng-model="join.password" ng-required="join.isPrivate">
                 </div>
                 <div class="form-group">
                     <label for="inputUsername">Username</label>
-                    <input type="text" class="form-control" id="inputUsername" placeholder="Username">
+                    <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="join.username" ng-required="true">
                 </div>
-
-                <button type="submit" class="btn btn-primary">CREATE</button>
+                <div class="form-group" ng-show="message">
+                    <div class="alert alert-danger" role="alert">
+                       {{message}}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Join</button>
                 <hr />
-                <button type="button" class="btn btn-link">Main Page</button>
-                <button type="button" class="btn btn-link">Help</button>
+                <a href="#!/" class="btn btn-link">Main Page</a>
+                <a href="#!/help" class="btn btn-link">Help</a>
             </form>
         </div>
     </div>

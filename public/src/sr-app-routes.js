@@ -10,7 +10,7 @@ angular.module('sr-app-routes', ['ngRoute'])
                 templateUrl: '../views/create.html',
                 controller: 'createpage-controller'
             })
-            .when('/join', {
+            .when('/join/:id?', {
                 templateUrl: '../views/join.html',
                 controller: 'joinpage-controller'
             })

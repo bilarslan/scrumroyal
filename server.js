@@ -240,12 +240,17 @@ app.post('/joinSession', function (req, res) {
 
     if (session) {
         if (session.sessionConfig.password && password == 'null') {
-            res.status(401).json({ message: "please password" });
+            res.status(401).json({ message: "Please provide password" });
         }
         else if (session.sessionConfig.password && session.sessionConfig.password != password) {
-            res.status(401).json({ message: "wrong password" });
+            res.status(401).json({ message: "Wrong password" });
         }
         else if ((session.sessionConfig.password == false) || (session.sessionConfig.password && session.sessionConfig.password == password)) {
+            
+            var index = session.sessionConfig.users.findIndex(x => x.username == username);
+            if (index != -1) {
+                return res.status(401).json({ message: "Username is already taken." });
+            }
 
             var token = jwt.sign({
                 sessionId: sessionId,
@@ -254,14 +259,14 @@ app.post('/joinSession', function (req, res) {
                     expiresIn: 60 * 24
                 });
 
-            res.json({ message: "successss", token: token });
+            res.json({ message: "Successss", token: token });
         }
         else {
             res.json({ message: 'asdasd' });
         }
 
     } else {
-        res.status(404).json({ message: 'session is not found!' });
+        res.status(404).json({ message: 'Session is not found!' });
     }
 
 

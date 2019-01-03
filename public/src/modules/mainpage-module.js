@@ -27,7 +27,6 @@ angular.module('mainpage-module', [])
                 });
         }
 
-
         $scope.join = {
             sessionId: '',
             username: '',
