@@ -1,27 +1,3 @@
-<div ng-show="!isLoggedIn">
-
-    asdasds
-
-    JOIN SESSION
-    <form ng-submit="joinSession()">
-        Enter text and hit enter:
-        <br><label for="join.sessionId">SessionId: </label><input type="text" ng-model="join.sessionId" name="join.sessionId"
-            ng-required="true" />
-        <br><label>isPrivate:
-            <input type="checkbox" ng-model="join.isPrivate">
-        </label>
-        <br><label for="join.password" ng-show="join.isPrivate">Password: </label><input type="password" ng-model="join.password"
-            name="join.password" ng-required="join.isPrivate" ng-show="join.isPrivate" />
-        <br><label for="join.username">Username: </label><input type="text" ng-model="join.username" name="join.username"
-            ng-required="true" />
-        <br><input type="submit" id="submitJoin" value="Submit" />
-    </form>
-
-    <label ng-show="joinMessage">{{joinMessage}}</label>
-
-</div>
-
-
 <div ng-show="isLoggedIn">
     {{title}}
 

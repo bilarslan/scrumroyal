@@ -1,5 +1,5 @@
 angular.module('planningsessionpage-module', [])
-    .controller('planningsessionpage-controller', ['$scope', '$http', '$routeParams', 'authService', function ($scope, $http, $routeParams, authService) {
+    .controller('planningsessionpage-controller', ['$scope', '$http', '$location', '$routeParams', 'authService', function ($scope, $http, $location, $routeParams, authService) {
 
         var socket;
 
@@ -38,11 +38,7 @@ angular.module('planningsessionpage-module', [])
         if (localData.sessionId == sessionId && localData.token) {
             initializeSocket(localData.sessionId, localData.token);
         } else {
-
-        }
-
-        $scope.joinSession = function () {
-            joinRequest($scope.join);
+            $location.path('/join/' + $scope.join.sessionId);
         }
 
         $scope.checkChanged = function (item) {
@@ -62,20 +58,6 @@ angular.module('planningsessionpage-module', [])
                     $scope.lockSpecial = false;
                 }
             }
-        }
-
-        function joinRequest(data) {
-            $http.post('/joinSession', data)
-                .then(function (res) {
-                    console.log(res.data);
-                    authService.setData(data.sessionId, res.data.token);
-                    initializeSocket(data.sessionId, res.data.token);
-                    $scope.isLoggedIn = true;
-                }, function (err) {
-                    console.log(err.data);
-                    $scope.joinMessage = err.data.message;
-                    $scope.isLoggedIn = false;
-                });
         }
 
         function initializeSocket(socketId, token) {
