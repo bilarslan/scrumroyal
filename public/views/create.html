@@ -3,39 +3,46 @@
         <div class="content">
             <h3>Create New Session</h3>
             <hr />
-            <form>
+            <form ng-submit="newSession()">
                 <div class="form-group">
                     <label for="inputSessionName">Session Name</label>
-                    <input type="text" class="form-control" id="inputSessionName" placeholder="Enter session name">
+                    <input type="text" class="form-control" id="inputSessionName" placeholder="Enter session name"
+                        ng-model="create.sessionName" ng-required="true">
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="checkIsPrivate">
+                    <input type="checkbox" class="form-check-input" id="checkIsPrivate" ng-model="create.isPrivate">
                     <label class="form-check-label" for="checkIsPrivate">Password Protection</label>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-show="create.isPrivate">
                     <label for="inputPassword">Password</label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Enter password">
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Enter password"
+                        ng-model="create.password" ng-required="create.isPrivate">
                 </div>
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="checkCardLimit">
+                    <input type="checkbox" class="form-check-input" id="checkCardLimit" ng-model="create.cardLimit">
                     <label class="form-check-label" for="checkCardLimit" aria-describedby="cardLimitHelp">Card Limit</label>
                     <small id="cardLimitHelp" class="form-text text-muted">Select one card at a time!</small>
                 </div>
                 <div class="form-group">
-                    <label for="selectCardSet">Cardset</label>
+                    <label for="selectCardSet">Cardset</label><br>
                     <select id="selectCardSet" ng-model="create.cardSet">
                         <option ng-repeat="set in cardSet track by $index" ng-value="$index">{{set.type}}</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="inputUsername">Username</label>
-                    <input type="text" class="form-control" id="inputUsername" placeholder="Username">
+                    <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="create.username"
+                        ng-required="true">
                 </div>
-
+                <div class="form-group" ng-show="message">
+                    <div class="alert alert-danger" role="alert">
+                       {{message}}
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">CREATE</button>
                 <hr />
-                <button type="button" class="btn btn-link">Main Page</button>
-                <button type="button" class="btn btn-link">Help</button>
+                <a href="#!/" class="btn btn-link">Main Page</a>
+                <a href="#!/help" class="btn btn-link">Help</a>
             </form>
         </div>
     </div>

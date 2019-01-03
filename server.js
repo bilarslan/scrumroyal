@@ -182,7 +182,7 @@ createPlanningSession(d);
 
 app.post('/newPlanning', function (req, res) {
 
-    var title = req.body.title;
+    var title = req.body.sessionName;
     var password = req.body.password;
     var username = req.body.username;
     var cardLimit = req.body.cardLimit;
