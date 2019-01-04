@@ -5,50 +5,42 @@
             <hr class="my-4">
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="height: 40vh;">
         <div class="col-md-9">
-            <div class="card">
-                <h5 class="card-header">Desk</h5>
-                <div class="card-body">
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                </div>
+            <b>Desk</b>
+            <hr class="my-4">
+            <div style="height:100%">
+                CONTENT
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card">
-                <h5 class="card-header">Users</h5>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
-                            <div>
-                                <div ng-show='user.isAdmin'>★</div>{{user.username}}
-                                <br>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <b>Users</b>
+            <hr class="my-4">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                    <div>
+                        <div ng-show='user.isAdmin'>★</div>{{user.username}}
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="height: 40vh;">
         <div class="col-md-9">
-            <div class="card">
-                <h5 class="card-header">Your Selection</h5>
-                <div class="card-body">
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                </div>
+            <b>Your Selection</b>
+            <hr class="my-4">
+            <div>
+                CONTENT
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card">
-                <h5 class="card-header">Info</h5>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
-                            <span>{{item}}</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            <b>Info</b>
+            <hr class="my-4">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                    <span>{{item}}</span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
