@@ -9,7 +9,7 @@ angular.module('createpage-module', [])
         $scope.create = {
             sessionName: '',
             isPrivate: false,
-            cardLimit: false,
+            cardLimit: true,
             cardSet: 0,
             password: '',
             username: '',
