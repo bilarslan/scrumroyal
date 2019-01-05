@@ -170,16 +170,6 @@ function createPlanningSession(params) {
 
 }
 
-var d = {
-    sessionId: 26,
-    title: 'DENEME',
-    password: 123456,
-    cardLimit: -1,
-    cardSet: 0
-}
-
-createPlanningSession(d);
-
 app.post('/newPlanning', function (req, res) {
 
     var title = req.body.sessionName;
@@ -204,7 +194,6 @@ app.post('/newPlanning', function (req, res) {
     do {
         sessionId = Math.floor(Math.random() * 1000) + 1000;
         var isFound = sessions.findIndex(x => x.sessionConfig.sessionId == sessionId);
-        console.log(sessionId, isFound);
     } while (isFound != -1);
 
     var data = {

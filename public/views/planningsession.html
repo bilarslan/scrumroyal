@@ -1,6 +1,22 @@
+<b>{{title}}</b>
 <div class="row">
-    <div class="col-md-9" style="height:600px">
-    {{title}}
+    <div class="col-md-9" style="height:600px; background: #00a651;">
+        <div class="hand grow self">
+            <div class="pcard suitdiamonds">
+                <p>A</p>
+            </div>
+            <div class="pcard suithearts">
+                <p>A</p>
+            </div>
+            <div class="pcard suitclubs">
+                <p>A</p>
+            </div>
+            <div class="pcard suitspades">
+                <p>A</p>
+            </div>
+
+        </div>
+
     </div>
     <div class="col-md-3">
         <div style="height:300px">
@@ -25,54 +41,118 @@
 </div>
 
 
-<!--
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <b>{{title}}</b>
-            <hr class="my-4">
-        </div>
-    </div>
-    <div class="row" style="height: 40vh;">
-        <div class="col-md-9">
-            <b>Desk</b>
-            <hr class="my-4">
-            <div style="height:100%">
-                CONTENT
-            </div>
-        </div>
-        <div class="col-md-3">
-            <b>Users</b>
-            <hr class="my-4">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
-                    <div>
-                        <div ng-show='user.isAdmin'>★</div>{{user.username}}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="row" style="height: 40vh;">
-        <div class="col-md-9">
-            <b>Your Selection</b>
-            <hr class="my-4">
-            <div>
-                CONTENT
-            </div>
-        </div>
-        <div class="col-md-3">
-            <b>Info</b>
-            <hr class="my-4">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
-                    <span>{{item}}</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
--->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /*HEADER*/
+    .header {
+        height: 25px;
+        background: #222;
+        color: #eee;
+        text-align: center;
+        font: 10px/25px Helvetica, Verdana, sans-serif;
+    }
+
+    .header a {
+        color: #999;
+    }
+
+    .hand {
+        margin: 50px;
+        zoom: 0.5;
+    }
+
+    /* For modern browsers */
+    .hand:before,
+    .hand:after {
+        content: "";
+        display: table;
+    }
+
+    .hand:after {
+        clear: both;
+    }
+
+    .self {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .pcard {
+        position: relative;
+        float: left;
+        margin-right: 10px;
+        margin-top: -.05em;
+        font: inherit;
+        width: 150px;
+        height: 220px;
+        border-radius: 10px;
+        background: white;
+        -webkit-box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+        box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+    }
+
+    .pcard p {
+        text-align: center;
+        font: 100px/220px Georgia, serif;
+    }
+
+    .suitdiamonds:before,
+    .suitdiamonds:after {
+        content: "♦";
+        color: #ff0000;
+    }
+
+    .suithearts:before,
+    .suithearts:after {
+        content: "♥";
+        color: #ff0000;
+    }
+
+    .suitclubs:before,
+    .suitclubs:after {
+        content: "♣";
+        color: #000;
+    }
+
+    .suitspades:before,
+    .suitspades:after {
+        content: "♠";
+        color: #000;
+    }
+
+    div[class*='suit']:before {
+        position: absolute;
+        font-size: 35px;
+        left: 5px;
+        top: 5px;
+    }
+
+    div[class*='suit']:after {
+        position: absolute;
+        font-size: 35px;
+        right: 5px;
+        bottom: 5px;
+    }
+
+    .pcard:hover {
+        cursor: pointer;
+    }
+
+    .grow>.pcard:hover {
+        -webkit-box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.9);
+        box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.9);
+        bottom: 2em;
+    }
+</style>
+
 <!--
 
 <div ng-show="isLoggedIn">
@@ -131,15 +211,3 @@
 
 </div>
 -->
-<style>
-    .list-group {
-        max-height: 500px;
-        margin-bottom: 10px;
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .with-margin {
-        margin-bottom: 20px;
-    }
-</style>
