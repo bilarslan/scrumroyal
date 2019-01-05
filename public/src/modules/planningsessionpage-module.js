@@ -1,6 +1,17 @@
 angular.module('planningsessionpage-module', [])
     .controller('planningsessionpage-controller', ['$scope', '$http', '$location', '$routeParams', 'authService', function ($scope, $http, $location, $routeParams, authService) {
 
+        // TEMP
+
+        $scope.selectedCard = 1;
+
+        $scope.selectCard = function(cardId) {
+            $scope.selectedCard = cardId;
+        }
+
+        //
+
+
         var socket;
 
         $scope.title = '';

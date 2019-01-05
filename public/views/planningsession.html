@@ -12,39 +12,41 @@
         overflow: auto !important;
     }
 
-    .hand {
-        margin: 50px;
-        zoom: 0.5;
-    }
-
-    /* For modern browsers */
-    .hand:before,
-    .hand:after {
-        content: "";
-        display: table;
-    }
-
-    .hand:after {
-        clear: both;
+    .pcard-container {
+        position: relative;
     }
 
     .pcard {
         position: relative;
-        float: left;
-        margin-right: 10px;
-        margin-top: -.05em;
+        margin: 10px;
         font: inherit;
-        width: 150px;
-        height: 220px;
-        border-radius: 10px;
+        width: 75px;
+        height: 110px;
+        border-radius: 5px;
         background: white;
         -webkit-box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
         box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+        transition: all .5s ease-in-out;
+    }
+
+    .pcard:not(:last-child) {
+        margin-right: 0;
+    }
+
+    .pcard.grow-on-hover:hover {
+        transform: translateY(-15px);
+        cursor: pointer;
+    }
+
+    .pcard.selected {
+        transform: translateY(-15px);
+        box-shadow: 0 7.5px 15px 0 rgba(0, 0, 0, 0.50);
     }
 
     .pcard p {
         text-align: center;
-        font: 100px/220px Georgia, serif;
+        font: 50px/110px Georgia, serif;
+        margin: 0;
     }
 
     .suitdiamonds:before,
@@ -73,26 +75,16 @@
 
     div[class*='suit']:before {
         position: absolute;
-        font-size: 35px;
+        font-size: 24px;
         left: 5px;
-        top: 5px;
+        top: 0;
     }
 
     div[class*='suit']:after {
         position: absolute;
-        font-size: 35px;
+        font-size: 24px;
         right: 5px;
-        bottom: 5px;
-    }
-
-    .pcard:hover {
-        cursor: pointer;
-    }
-
-    .grow>.pcard:hover {
-        -webkit-box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.9);
-        box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.9);
-        bottom: 2em;
+        bottom: 0;
     }
 </style>
 <div class="d-flex flex-column flex-1 royal-board-container">
@@ -103,10 +95,9 @@
             </div>
 
             <!-- ROYAL BOARD CONTENT -->
-            <div class="d-flex flex-1">
+            <div class="d-flex flex-column flex-1">
 
-                <!-- ROYAL CARD AREA -->
-                <div class="hand grow self">
+                <div class="d-flex flex-row justify-content-center pcard-container">
                     <div class="pcard suitdiamonds">
                         <p>A</p>
                     </div>
@@ -119,27 +110,31 @@
                     <div class="pcard suitspades">
                         <p>A</p>
                     </div>
-
                 </div>
 
             </div>
 
             <!-- BOTTOM CARD AREA -->
-            <div class="d-flex">
-                <div class="hand grow self">
-                    <div class="pcard suitdiamonds">
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row justify-content-center pcard-container">
+                    <div tabindex="1" ng-click="selectCard(1)" ng-class="selectedCard === 1 ? 'selected' : ''" class="pcard grow-on-hover suitdiamonds">
                         <p>A</p>
                     </div>
-                    <div class="pcard suithearts">
+                    <div tabindex="2" ng-click="selectCard(2)" ng-class="selectedCard === 2 ? 'selected' : ''" class="pcard grow-on-hover suithearts">
                         <p>A</p>
                     </div>
-                    <div class="pcard suitclubs">
+                    <div tabindex="3" ng-click="selectCard(3)" ng-class="selectedCard === 3 ? 'selected' : ''" class="pcard grow-on-hover suitclubs">
                         <p>A</p>
                     </div>
-                    <div class="pcard suitspades">
+                    <div tabindex="4" ng-click="selectCard(4)" ng-class="selectedCard === 4 ? 'selected' : ''" class="pcard grow-on-hover suitspades">
                         <p>A</p>
                     </div>
-
+                </div>
+                <div class="d-flex flex-row">
+                    <div class="flex-1"></div>
+                    <button class="btn btn-light m-2">Select Card</button>
+                    <button class="btn btn-light m-2">Reset</button>
+                    <button class="btn btn-light m-2">Open</button>
                 </div>
             </div>
         </div>
