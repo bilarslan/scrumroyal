@@ -1,3 +1,35 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-container {
+    overflow: auto;
+}
+
+.flex-1 {
+    flex: 1 !important;
+}
+
+.w-20 {
+    width: 20% !important;
+}
+
+.w-80 {
+    width: 80% !important;
+}
+
+.navbar {
+    border-bottom: solid 1px #dee2e6;
+}
+
+.display-5 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
 .back {
     background: #e2e2e2;
     width: 100%;

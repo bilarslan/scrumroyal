@@ -1,67 +1,15 @@
-<b>{{title}}</b>
-<div class="row">
-    <div class="col-md-9" style="height:600px; background: #00a651;">
-        <div class="hand grow self">
-            <div class="pcard suitdiamonds">
-                <p>A</p>
-            </div>
-            <div class="pcard suithearts">
-                <p>A</p>
-            </div>
-            <div class="pcard suitclubs">
-                <p>A</p>
-            </div>
-            <div class="pcard suitspades">
-                <p>A</p>
-            </div>
-
-        </div>
-
-    </div>
-    <div class="col-md-3">
-        <div style="height:300px">
-            <b>Users</b>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
-                    <div>
-                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div style="height:300px">
-            <b>Info</b>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
-                    <span>{{item}}</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-
 <style>
-    * {
-        margin: 0;
-        padding: 0;
+    .royal-board {
+        background-image: radial-gradient(circle, #0caf50, #00a651);
     }
 
-    .hidden {
-        display: none;
+    .royal-board-title {
+        background-image: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0));
+        color: #fafafa;
     }
 
-    /*HEADER*/
-    .header {
-        height: 25px;
-        background: #222;
-        color: #eee;
-        text-align: center;
-        font: 10px/25px Helvetica, Verdana, sans-serif;
-    }
-
-    .header a {
-        color: #999;
+    .side-list-container {
+        overflow: auto !important;
     }
 
     .hand {
@@ -78,11 +26,6 @@
 
     .hand:after {
         clear: both;
-    }
-
-    .self {
-        position: absolute;
-        bottom: 0;
     }
 
     .pcard {
@@ -152,9 +95,135 @@
         bottom: 2em;
     }
 </style>
+<div class="d-flex flex-column flex-1 royal-board-container">
+    <div class="d-flex flex-row flex-1">
+        <div class="d-flex flex-column w-80 royal-board">
+            <div class="d-flex p-2 lead royal-board-title">
+                <strong>{{title}}</strong>
+            </div>
+            <div class="d-flex flex-1">
+
+            </div>
+            <div class="d-flex">
+                <div class="hand grow self">
+                    <div class="pcard suitdiamonds">
+                        <p>A</p>
+                    </div>
+                    <div class="pcard suithearts">
+                        <p>A</p>
+                    </div>
+                    <div class="pcard suitclubs">
+                        <p>A</p>
+                    </div>
+                    <div class="pcard suitspades">
+                        <p>A</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column w-20">
+            <div class="d-flex flex-column flex-1">
+                <p class="lead m-0 p-2 bg-light"><b>Users</b></p>
+                <ul class="list-group list-group-flush flex-1 side-list-container pt-3 pb-3 pl-2 pr-2">
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <!-- TMP -->
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                    </li>
+                    <!-- TMP -->
+                </ul>
+            </div>
+            <div class="d-flex flex-column flex-1">
+                <p class="lead m-0 p-2 bg-light"><b>Info</b></p>
+                <ul class="list-group flex-1 list-group-flush side-list-container pt-3 pb-3 pl-2 pr-2">
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <!-- TMP -->
+
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                        <span>{{item}}</span>
+                    </li>
+                    <!-- TMP -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--
-
 <div ng-show="isLoggedIn">
     {{title}}
 
