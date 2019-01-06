@@ -1,17 +1,6 @@
 angular.module('planningsessionpage-module', [])
     .controller('planningsessionpage-controller', ['$scope', '$http', '$location', '$routeParams', 'authService', function ($scope, $http, $location, $routeParams, authService) {
 
-        // TEMP
-
-        $scope.selectedCard = 1;
-
-        $scope.selectCard = function(cardId) {
-            $scope.selectedCard = cardId;
-        }
-
-        //
-
-
         var socket;
 
         $scope.title = '';
@@ -52,18 +41,19 @@ angular.module('planningsessionpage-module', [])
             $location.path('/join/' + $scope.join.sessionId);
         }
 
-        $scope.checkChanged = function (item) {
-            if (item.selected) {
+        $scope.checkChanged = function (card) {
+            if (card.selected == false) {
+                card.selected = true;
                 $scope.checked++;
-                if (item.specialCard == true) {
+                if (card.specialCard == true) {
                     $scope.lockAll = true;
                 } else {
                     $scope.lockSpecial = true;
                 }
-            }
-            else {
+            } else {
+                card.selected = false;
                 $scope.checked--;
-                if (item.specialCard == true) {
+                if (card.specialCard == true) {
                     $scope.lockAll = false;
                 } else {
                     $scope.lockSpecial = false;
@@ -107,7 +97,7 @@ angular.module('planningsessionpage-module', [])
             });
 
             socket.on('server.info', function (data) {
-                //console.log(data);
+                console.log(data);
 
                 var action = data.action;
                 if (action == 'CONNECT') {
@@ -177,11 +167,19 @@ angular.module('planningsessionpage-module', [])
         }
 
         function buildCards(cards, cardLimit) {
+            var types = [
+                'suitdiamonds',
+                'suithearts',
+                'suitclubs',
+                'suitspades',
+            ];
             $scope.cards = [];
             $scope.limit = cardLimit;
             cards.forEach(function (element) {
-                $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞") });
+                $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞"), view: types[Math.floor(Math.random() * (types.length))] });
             });
+            console.log($scope.cards);
         }
 
     }]);
+
