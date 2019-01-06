@@ -167,19 +167,41 @@ angular.module('planningsessionpage-module', [])
         }
 
         function buildCards(cards, cardLimit) {
-            var types = [
-                'suitdiamonds',
-                'suithearts',
-                'suitclubs',
-                'suitspades',
-            ];
             $scope.cards = [];
             $scope.limit = cardLimit;
             cards.forEach(function (element) {
-                $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞"), view: types[Math.floor(Math.random() * (types.length))] });
+                $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞") });
             });
             console.log($scope.cards);
         }
 
-    }]);
+    }])
+    .directive("ngRandomCardView", function () {
+        return {
+            restrict: 'A',
+            replace: false,
+            scope: {
+                ngIsback: "="
+            },
+            link: function (scope, elem, attr) {
+                var types = [
+                    'suitdiamonds',
+                    'suithearts',
+                    'suitclubs',
+                    'suitspades',
+                ];
+                scope.$watch('ngIsback', function () {
+                    if (scope.ngIsback == true) {
+                        types.forEach(function (type) {
+                            elem.removeClass(type);
+                        });
+                        elem.addClass('back');
+                    } else {
+                        elem.removeClass('back');
+                        elem.addClass(types[Math.floor(Math.random() * (types.length))]);
+                    }
+                });
+            }
+        }
+    });;
 

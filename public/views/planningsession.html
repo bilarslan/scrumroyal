@@ -36,6 +36,7 @@
         background-size: 1vmin 1vmin;
         background-position: 0 0, 2.5vmin 2.5vmin;
         border: solid 0.5vmin #fff;
+        position: relative;
     }
 
     .pcard:not(:last-child) {
@@ -121,7 +122,7 @@
 
 
                     <div ng-repeat="user in users track by $index" ng-show="user.cardSelected">
-                        <div class="pcard back">
+                        <div class="pcard" ng-random-card-view ng-isback="user.score >= 0 ? false:true">
                             <p ng-show="user.score >= 0">{{user.score}}</p>
                             <div class="name">{{user.username}}</div>
                         </div>
@@ -136,7 +137,8 @@
             <div class="d-flex flex-column">
                 <div class="d-flex flex-row justify-content-center pcard-container">
                     <div ng-repeat="card in cards track by $index">
-                        <div tabindex="$index" ng-click="checkChanged(card)" ng-class="[{selected: card.selected, disabled: (checked==limit && !card.selected) || (lockAll && !card.selected) || (lockSpecial && card.specialCard) },card.view]" class="pcard grow-on-hover">
+                        <div tabindex="$index" ng-click="checkChanged(card)" ng-class="{selected: card.selected, disabled: (checked==limit && !card.selected) || (lockAll && !card.selected) || (lockSpecial && card.specialCard) }"
+                            class="pcard grow-on-hover" ng-random-card-view ng-isback="false">
                             <p>{{card.value}}</p>
                         </div>
                     </div>
@@ -145,7 +147,7 @@
                     <div class="flex-1"></div>
                     <button class="btn btn-light m-2" ng-click="confimCardSelection()">Select Card</button>
                     <button class="btn btn-light m-2" ng-click="resetCardSelection()">Reset</button>
-                    <button class="btn btn-light m-2" ng-click="openCards()">Open</button>
+                    <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin" >Open</button>
                 </div>
             </div>
         </div>
