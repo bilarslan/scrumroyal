@@ -18,7 +18,7 @@
 
     .pcard {
         position: relative;
-        margin: 10px;
+        margin: 7px;
         font: inherit;
         width: 75px;
         height: 110px;
@@ -29,7 +29,7 @@
         transition: all .5s ease-in-out;
     }
 
-    .back {
+    .pback {
         background-color: #fff;
         background-image: radial-gradient(closest-side, transparent 98%, #669 99%),
             radial-gradient(closest-side, transparent 98%, #669 99%);
@@ -122,8 +122,8 @@
 
 
                     <div ng-repeat="user in users track by $index" ng-show="user.cardSelected">
-                        <div class="pcard" ng-random-card-view ng-isback="user.score >= 0 ? false:true">
-                            <p ng-show="user.score >= 0">{{user.score}}</p>
+                        <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false">
+                            <p ng-show="user.score != -1">{{user.score}}</p>
                             <div class="name">{{user.username}}</div>
                         </div>
 

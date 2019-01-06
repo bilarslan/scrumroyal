@@ -103,12 +103,12 @@ angular.module('planningsessionpage-module', [])
                 if (action == 'CONNECT') {
                     console.log(data.username + ' connected.');
                     $scope.users = data.users;
-                    $scope.info.push(data.username + ' is connected.');
+                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.username + ' is connected.');
                 }
                 else if (action == 'DISCONNECT') {
                     console.log(data.username + ' disconnected');
                     $scope.users = data.users;
-                    $scope.info.push(data.username + ' is disconnected.');
+                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.username + ' is disconnected.');
                 }
                 else if (action == 'CARD.SELECTED') {
                     var user = $scope.users.find(x => x.username == data.username);
@@ -195,9 +195,9 @@ angular.module('planningsessionpage-module', [])
                         types.forEach(function (type) {
                             elem.removeClass(type);
                         });
-                        elem.addClass('back');
+                        elem.addClass('pback');
                     } else {
-                        elem.removeClass('back');
+                        elem.removeClass('pback');
                         elem.addClass(types[Math.floor(Math.random() * (types.length))]);
                     }
                 });
