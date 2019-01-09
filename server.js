@@ -53,6 +53,7 @@ function createPlanningSession(params) {
                 socket.disconnect(true);
                 return;
             }
+
             var username = decoded.username;
             var isAdmin = decoded.isAdmin;
 
@@ -62,7 +63,6 @@ function createPlanningSession(params) {
             if (session) {
                 var user = session.sessionConfig.users.find(x => x.username == username);
                 if (user) {
-                    //Same username
                     socket.disconnect(true);
                     return;
                 }
@@ -70,27 +70,39 @@ function createPlanningSession(params) {
                 socket.username = username;
                 socket.isAdmin = isAdmin;
 
-                session.sessionConfig.users.push({ id: socket.id, username: username, isAdmin: isAdmin, selectedCards: [], score: -1 });
+                user = { id: socket.id, username: username, isAdmin: isAdmin, selectedCards: [] };
+
+                session.sessionConfig.users.push(user);
 
                 socket.emit('user.info', {
                     action: 'CONNECT',
+                    id: user.id,
+                    username: user.username,
+                    isAdmin: isAdmin,
                     title: session.sessionConfig.title,
                     cardLimit: session.sessionConfig.cardLimit,
                     cardSet: session.sessionConfig.cardSet,
-                    isAdmin: isAdmin
+                    users: session.sessionConfig.users.map(x => {
+                        var obj = {};
+                        obj['id'] = x.id;
+                        obj['username'] = x.username;
+                        obj['isActive'] = true;
+                        obj['isAdmin'] = x.isAdmin;
+                        obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
+                        obj['score'] = -1;
+                        return obj;
+                    })
                 });
 
                 group.emit('server.info', {
                     action: 'CONNECT',
-                    username: socket.username,
-                    users: session.sessionConfig.users.map(x => {
-                        var obj = {};
-                        obj['username'] = x.username;
-                        obj['isAdmin'] = x.isAdmin;
-                        obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
-                        obj['score'] = x.score;
-                        return obj;
-                    })
+                    user: {
+                        id: user.id,
+                        username: user.username,
+                        isAdmin: user.isAdmin,
+                        isActive: true,
+                        cardSelected: false
+                    }
                 });
             }
             else {
@@ -132,7 +144,6 @@ function createPlanningSession(params) {
             });
 
             socket.on('disconnect', function (data) {
-
                 var groupName = socket.nsp.name;
                 var session = sessions.find(x => x.name == groupName);
                 if (session) {
@@ -140,7 +151,14 @@ function createPlanningSession(params) {
                     if (user) {
                         var index = session.sessionConfig.users.findIndex(x => x.username == socket.username);
                         session.sessionConfig.users.splice(index, 1);
-                        //session.sessionConfig.users.splice(session.sessionConfig.users.indexOf(user), 1);
+                        group.emit('server.info', {
+                            action: 'DISCONNECT',
+                            user: {
+                                id: socket.id,
+                                username: socket.username
+                            }
+                        });
+
                     } else {
                         console.log('user is not found!');
                     }
@@ -148,20 +166,6 @@ function createPlanningSession(params) {
                 else {
                     console.log('session is not found!');
                 }
-
-                group.emit('server.info', {
-                    action: 'DISCONNECT',
-                    username: socket.username,
-                    users: session.sessionConfig.users.map(x => {
-                        var obj = {};
-                        obj['username'] = x.username;
-                        obj['isAdmin'] = x.isAdmin;
-                        obj['cardSelected'] = x.selectedCards.length > 0 ? true : false;
-                        obj['score'] = x.score;
-                        return obj;
-                    })
-                });
-
             });
 
         });
@@ -235,7 +239,7 @@ app.post('/joinSession', function (req, res) {
             res.status(401).json({ message: "Wrong password" });
         }
         else if ((session.sessionConfig.password == false) || (session.sessionConfig.password && session.sessionConfig.password == password)) {
-            
+
             var index = session.sessionConfig.users.findIndex(x => x.username == username);
             if (index != -1) {
                 return res.status(401).json({ message: "Username is already taken." });

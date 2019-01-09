@@ -69,11 +69,17 @@ angular.module('planningsessionpage-module', [])
                 console.log(data);
                 var action = data.action;
                 if (action == 'CONNECT') {
-                    $scope.socketStatus = 'Connected.';
-                    $scope.title = data.title;
+                    authService.id = data.id;
+                    authService.username = data.username;
                     $scope.isAdmin = data.isAdmin;
+
+                    $scope.title = data.title;
                     var index = data.cardSet;
-                    buildCards(cardSet[index].type, data.cardLimit);
+                    buildCards(cardSet[data.cardSet].type, data.cardLimit);
+
+                    $scope.users = data.users;
+
+                    $scope.socketStatus = 'Connected.';
                     $scope.isLoggedIn = true;
                 }
                 else if (action == 'CARD.SELECTED') {
@@ -82,6 +88,7 @@ angular.module('planningsessionpage-module', [])
                     if (data.selectedCards.length == 0) {
                         $scope.lockAll = false;
                         $scope.lockSpecial = false;
+                        return;
                     }
                     $scope.cards.forEach(function (element) {
                         var confirmedCard = data.selectedCards.find(x => x.value == element.value);
@@ -101,23 +108,32 @@ angular.module('planningsessionpage-module', [])
 
                 var action = data.action;
                 if (action == 'CONNECT') {
-                    console.log(data.username + ' connected.');
-                    $scope.users = data.users;
-                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.username + ' is connected.');
+                    if (data.user.id != authService.id) {
+                        $scope.users.push(data.user);
+                    }
+                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is connected.');
                 }
                 else if (action == 'DISCONNECT') {
-                    console.log(data.username + ' disconnected');
-                    $scope.users = data.users;
-                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.username + ' is disconnected.');
+                    for (var i = 0; i < $scope.users.length; i++) {
+                        var user = $scope.users[i];
+                       // console.log(user.id, data.user.id);
+                        if (user.id == data.user.id) {
+                            user.isActive = false;
+                            $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is disconnected.');
+                            break;
+                        }
+                    }
                 }
                 else if (action == 'CARD.SELECTED') {
                     var user = $scope.users.find(x => x.username == data.username);
                     if (user) {
+                        user.score = -1;
+                        user.isActive = true;
                         user.cardSelected = data.cardSelected;
                     }
+                    console.log($scope.users);
                 }
                 else if (action == 'CARD.OPEN') {
-                    console.log(data);
                     $scope.users.forEach(function (user) {
                         var userData = data.users.find(x => x.username == user.username);
                         if (userData) {
@@ -138,11 +154,13 @@ angular.module('planningsessionpage-module', [])
 
             socket.on('disconnect', function (data) {
                 $scope.socketStatus = 'Disconnected';
+                authService.setData();
                 console.log(data);
             });
 
             socket.on('error', function (err) {
                 $scope.socketStatus = 'Disconnected';
+                authService.setData();
                 console.log(err);
             });
 

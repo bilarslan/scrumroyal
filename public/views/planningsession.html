@@ -122,7 +122,7 @@
 
 
                     <div ng-repeat="user in users track by $index" ng-show="user.cardSelected">
-                        <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false">
+                        <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false" ng-class="{disabled:!user.isActive}">
                             <p ng-show="user.score != -1">{{user.score}}</p>
                             <div class="name">{{user.username}}</div>
                         </div>
@@ -147,7 +147,7 @@
                     <div class="flex-1"></div>
                     <button class="btn btn-light m-2" ng-click="confimCardSelection()">Select Card</button>
                     <button class="btn btn-light m-2" ng-click="resetCardSelection()">Reset</button>
-                    <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin" >Open</button>
+                    <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin">Open</button>
                 </div>
             </div>
         </div>
@@ -155,7 +155,7 @@
             <div class="d-flex flex-column flex-1">
                 <p class="lead m-0 p-2 bg-light"><b>Users</b></p>
                 <ul class="list-group list-group-flush flex-1 side-list-container pt-3 pb-3 pl-2 pr-2">
-                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index">
+                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index" ng-show="user.isActive">
                         <span ng-show='user.isAdmin'>★</span>{{user.username}}
                     </li>
                 </ul>

@@ -3,6 +3,8 @@ angular.module('auth-service-module', [])
 
         var authFactory = {};
 
+        authFactory.id = '';
+        authFactory.username = '';
         authFactory.isLoggedIn = false;
 
         authFactory.getData = function () {
