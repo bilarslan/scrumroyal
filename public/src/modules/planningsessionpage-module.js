@@ -79,6 +79,16 @@ angular.module('planningsessionpage-module', [])
                     buildCards(cardSet[data.cardSet].type, data.cardLimit);
 
                     $scope.users = data.users;
+                    for (var i = 0; i < data.users.length; i++) {
+                        var user = data.users[i];
+                        if (user.cardSelected == true) {
+                            $scope.results.push({
+                                username: user.username,
+                                cardSelected: user.cardSelected,
+                                score: -1
+                            });
+                        }
+                    }
 
                     $scope.socketStatus = 'Connected.';
                     $scope.isLoggedIn = true;
@@ -135,8 +145,8 @@ angular.module('planningsessionpage-module', [])
                                     card.selected = false;
                                 }
                             }
-                        }else
-                        result.score = -1;
+                        } else
+                            result.score = -1;
                     } else {
                         $scope.results.push({
                             username: data.username,
