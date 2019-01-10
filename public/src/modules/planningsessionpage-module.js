@@ -23,6 +23,7 @@ angular.module('planningsessionpage-module', [])
 
 
         $scope.cards = [];
+        $scope.results = [];
 
         $scope.lockAll = false;
         $scope.lockSpecial = false;
@@ -116,7 +117,6 @@ angular.module('planningsessionpage-module', [])
                 else if (action == 'DISCONNECT') {
                     for (var i = 0; i < $scope.users.length; i++) {
                         var user = $scope.users[i];
-                       // console.log(user.id, data.user.id);
                         if (user.id == data.user.id) {
                             user.isActive = false;
                             $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is disconnected.');
@@ -125,16 +125,28 @@ angular.module('planningsessionpage-module', [])
                     }
                 }
                 else if (action == 'CARD.SELECTED') {
-                    var user = $scope.users.find(x => x.username == data.username);
-                    if (user) {
-                        user.score = -1;
-                        user.isActive = true;
-                        user.cardSelected = data.cardSelected;
+                    var result = $scope.results.find(x => x.username == data.username);
+                    if (result) {
+                        result.cardSelected = data.cardSelected;
+                        if (result.cardSelected == false) {
+                            for (var i = 0; i < $scope.cards.length; i++) {
+                                var card = $scope.cards[i];
+                                if (card.selected == true) {
+                                    card.selected = false;
+                                }
+                            }
+                        }else
+                        result.score = -1;
+                    } else {
+                        $scope.results.push({
+                            username: data.username,
+                            cardSelected: data.cardSelected,
+                            score: -1
+                        });
                     }
-                    console.log($scope.users);
                 }
                 else if (action == 'CARD.OPEN') {
-                    $scope.users.forEach(function (user) {
+                    $scope.results.forEach(function (user) {
                         var userData = data.users.find(x => x.username == user.username);
                         if (userData) {
                             var sum = 0;
