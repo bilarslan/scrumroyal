@@ -49,7 +49,13 @@ function createPlanningSession(params) {
         var token = socket.handshake.query['token'];
         jwt.verify(token, secretKey, function (err, decoded) {
             if (err) {
-                console.log(err);
+                if(err.name == 'TokenExpiredError'){
+                    console.log('TokenExpiredError');
+                }else if(err.name == 'JsonWebTokenError'){
+                    console.log('JsonWebTokenError');
+                }else{
+                    console.log(err.name);
+                }
                 socket.disconnect(true);
                 return;
             }
@@ -222,7 +228,7 @@ app.post('/newPlanning', function (req, res) {
         username: username,
         isAdmin: true
     }, secretKey, {
-            expiresIn: 60 * 24
+            expiresIn: '24h'
         });
 
     createPlanningSession(data);
@@ -258,7 +264,7 @@ app.post('/joinSession', function (req, res) {
                 sessionId: sessionId,
                 username: username
             }, secretKey, {
-                    expiresIn: 60 * 24
+                    expiresIn: '24h'
                 });
 
             res.json({ message: "Successss", token: token });
