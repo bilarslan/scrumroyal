@@ -132,6 +132,15 @@ function createPlanningSession(params) {
                                 group.emit('server.info', { action: 'CARD.OPEN', users: session.sessionConfig.users });
                             }
                         }
+                        else if (action == 'RESET.ALL') {
+                            if (socket.isAdmin) {
+                                for (var i = 0; i < session.sessionConfig.users.length; i++) {
+                                    var user = session.sessionConfig.users[i];
+                                    user.selectedCards = [];
+                                }
+                                group.emit('server.info', { action: 'RESET.ALL.CARDS' });
+                            }
+                        }
 
                     } else {
                         console.log('user is not found!');

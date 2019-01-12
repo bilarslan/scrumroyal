@@ -179,6 +179,20 @@ angular.module('planningsessionpage-module', [])
                         user.score = sum;
                     });
                 }
+                else if(action == 'RESET.ALL.CARDS'){
+                    $scope.results = [];
+                    $scope.checked = 0;
+                    $scope.lockAll = false;
+                    $scope.lockSpecial = false;
+
+                    $scope.cards.forEach(function (element) {
+                            element.selected = element.confirmed = false;
+                    });
+
+                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + 'Admin reset all results.');
+
+                }
+
                 $scope.$apply();
             });
 
@@ -209,6 +223,14 @@ angular.module('planningsessionpage-module', [])
                 if ($scope.isAdmin) {
                     socket.emit('card.action', { action: 'OPEN' });
                 } else {
+                    console.log('you are not admin');
+                }
+            }
+
+            $scope.resetCards = function () {
+                if ($scope.isAdmin) {
+                    socket.emit('card.action', {action: 'RESET.ALL'});
+                }else{
                     console.log('you are not admin');
                 }
             }
