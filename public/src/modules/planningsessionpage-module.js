@@ -99,7 +99,6 @@ angular.module('planningsessionpage-module', [])
                     if (data.selectedCards.length == 0) {
                         $scope.lockAll = false;
                         $scope.lockSpecial = false;
-                        return;
                     }
                     $scope.cards.forEach(function (element) {
                         var confirmedCard = data.selectedCards.find(x => x.value == element.value);
@@ -143,19 +142,21 @@ angular.module('planningsessionpage-module', [])
                     }
                 }
                 else if (action == 'CARD.SELECTED') {
-                    var result = $scope.results.find(x => x.username == data.username);
-                    if (result) {
-                        result.cardSelected = data.cardSelected;
-                        if (result.cardSelected == false) {
-                            for (var i = 0; i < $scope.cards.length; i++) {
-                                var card = $scope.cards[i];
-                                if (card.selected == true) {
-                                    card.selected = false;
-                                }
+
+                    var isFound = false;
+                    for (var i = 0; i < $scope.results.length; i++) {
+                        var result = $scope.results[i];
+                        if (result.username == data.username) {
+                            isFound = true;
+                            if (result.score == -1) {
+                                result.cardSelected = data.cardSelected;
+                            } else {
+                                //Update animation
                             }
-                        } else
-                            result.score = -1;
-                    } else {
+                            break;
+                        }
+                    }
+                    if (isFound == false) {
                         $scope.results.push({
                             username: data.username,
                             cardSelected: data.cardSelected,
@@ -167,26 +168,32 @@ angular.module('planningsessionpage-module', [])
                     $scope.results.forEach(function (user) {
                         var userData = data.users.find(x => x.username == user.username);
                         if (userData) {
-                            var sum = 0;
-                            userData.selectedCards.forEach(function (card) {
-                                if (card.value == "?" || card.value == "∞") {
-                                    sum = card.value;
-                                } else {
-                                    sum += parseInt(card.value);
-                                }
-                            });
+                            if (userData.selectedCards.length == 0) {
+                                user.cardSelected = false;
+                                user.score = -1;
+                            } else {
+                                var sum = 0;
+                                user.cardSelected = true;
+                                userData.selectedCards.forEach(function (card) {
+                                    if (card.value == "?" || card.value == "∞") {
+                                        sum = card.value;
+                                    } else {
+                                        sum += parseInt(card.value);
+                                    }
+                                });
+                                user.score = sum;
+                            }
                         }
-                        user.score = sum;
                     });
                 }
-                else if(action == 'RESET.ALL.CARDS'){
+                else if (action == 'RESET.ALL.CARDS') {
                     $scope.results = [];
                     $scope.checked = 0;
                     $scope.lockAll = false;
                     $scope.lockSpecial = false;
 
                     $scope.cards.forEach(function (element) {
-                            element.selected = element.confirmed = false;
+                        element.selected = element.confirmed = false;
                     });
 
                     $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + 'Admin reset all results.');
@@ -229,8 +236,8 @@ angular.module('planningsessionpage-module', [])
 
             $scope.resetCards = function () {
                 if ($scope.isAdmin) {
-                    socket.emit('card.action', {action: 'RESET.ALL'});
-                }else{
+                    socket.emit('card.action', { action: 'RESET.ALL' });
+                } else {
                     console.log('you are not admin');
                 }
             }
