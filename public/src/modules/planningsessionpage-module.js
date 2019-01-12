@@ -60,6 +60,7 @@ angular.module('planningsessionpage-module', [])
                     $scope.lockSpecial = false;
                 }
             }
+            $scope.confimCardSelection();
         }
 
         function initializeSocket(socketId, token) {
