@@ -127,9 +127,17 @@ angular.module('planningsessionpage-module', [])
                 else if (action == 'DISCONNECT') {
                     for (var i = 0; i < $scope.users.length; i++) {
                         var user = $scope.users[i];
-                        if (user.id == data.user.id) {
-                            user.isActive = false;
+                        if (user.username == data.user.username) {
+                            $scope.users.splice(i, 1);
                             $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is disconnected.');
+                            break;
+                        }
+                    }
+
+                    for (var i = 0; i < $scope.results.length; i++) {
+                        var result = $scope.results[i];
+                        if (result.username == data.user.username && result.score == -1) {
+                            $scope.results.splice(i, 1);
                             break;
                         }
                     }
