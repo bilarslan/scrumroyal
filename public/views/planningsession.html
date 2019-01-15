@@ -20,10 +20,10 @@
         position: relative;
         margin: 7px;
         font: inherit;
-        width: 75px;
-        height: 110px;
         border-radius: 5px;
         background: white;
+        width: 37.5px;
+        height: 55px;
         -webkit-box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
         box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
         transition: all .5s ease-in-out;
@@ -60,17 +60,18 @@
 
     .pcard p {
         text-align: center;
-        font: 50px/110px Georgia, serif;
+        font: 14px/55px Georgia, serif;
         margin: 0;
+        transition: all .5s ease-in-out;
     }
 
     .pcard .name {
         text-align: center;
-        font: 20px/22px Georgia, serif;
+        font: 16px Georgia, serif;
     }
 
     .pcard.pback .name {
-        margin-top: 106px;
+        margin-top: 51px;
     }
 
     .suitdiamonds:before,
@@ -99,78 +100,146 @@
 
     div[class*='suit']:before {
         position: absolute;
-        font-size: 24px;
-        left: 5px;
+        font-size: 14px;
+        left: 2px;
         top: 0;
+        transition: all .5s ease-in-out;
     }
 
     div[class*='suit']:after {
         position: absolute;
-        font-size: 24px;
-        right: 5px;
+        font-size: 14px;
+        right: 2px;
         bottom: 0;
+        transition: all .5s ease-in-out;
+    }
+
+    @media (min-width: 992px) {
+        .pcard {
+            width: 45px;
+            height: 66px;
+        }
+
+        .pcard p {
+            font: 22px/66px Georgia, serif;
+        }
+
+        div[class*='suit']:before {
+            position: absolute;
+            font-size: 16px;
+            left: 3px;
+            top: 0;
+        }
+
+        div[class*='suit']:after {
+            position: absolute;
+            font-size: 16px;
+            right: 3px;
+            bottom: 0;
+        }
+
+        .pcard.pback .name {
+            margin-top: 62px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .pcard {
+            width: 60px;
+            height: 88px;
+        }
+
+        .pcard p {
+            font: 29px/88px Georgia, serif;
+        }
+
+        div[class*='suit']:before {
+            position: absolute;
+            font-size: 18px;
+            left: 4px;
+            top: 0;
+        }
+
+        div[class*='suit']:after {
+            position: absolute;
+            font-size: 18px;
+            right: 4px;
+            bottom: 0;
+        }
+
+        .pcard.pback .name {
+            margin-top: 84px;
+        }
     }
 </style>
-<div class="d-flex flex-column flex-1 royal-board-container">
-    <div class="d-flex flex-row flex-1">
-        <div class="d-flex flex-column w-80 royal-board">
-            <div class="d-flex p-2 lead royal-board-title">
-                <strong>{{title}}</strong>
-            </div>
+<div class="container-fluid h-100 p-0 royal-board-container">
+    <div class="col h-100">
+        <div class="row h-100">
 
-            <!-- ROYAL BOARD CONTENT -->
-            <div class="d-flex flex-column flex-1">
+            <div class="col-md-8 col-lg-9 h-100 royal-board">
+                <div class="row h-100 d-flex flex-column">
+                    <div class="d-flex p-2 lead royal-board-title">
+                        <strong>{{title}}</strong>
+                    </div>
 
-                <div class="d-flex flex-row justify-content-center pcard-container">
+                    <!-- ROYAL BOARD CONTENT -->
+                    <div class="d-flex flex-column flex-1">
+
+                        <div class="d-flex flex-row justify-content-center pcard-container">
 
 
-                    <div ng-repeat="user in results track by $index" ng-show="user.cardSelected">
-                        <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false">
-                            <p ng-show="user.score != -1">{{user.score}}</p>
-                            <div class="name">{{user.username}}</div>
+                            <div ng-repeat="user in results track by $index" ng-show="user.cardSelected">
+                                <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false">
+                                    <p ng-show="user.score != -1">{{user.score}}</p>
+                                    <div class="name">{{user.username}}</div>
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
 
-                </div>
-
-            </div>
-
-            <!-- BOTTOM CARD AREA -->
-            <div class="d-flex flex-column">
-                <div class="d-flex flex-row justify-content-center pcard-container">
-                    <div ng-repeat="card in cards track by $index">
-                        <div tabindex="$index" ng-click="checkChanged(card)" ng-class="{selected: card.selected, disabled: (checked==limit && !card.selected) || (lockAll && !card.selected) || (lockSpecial && card.specialCard) }"
-                            class="pcard grow-on-hover" ng-random-card-view ng-isback="false">
-                            <p>{{card.value}}</p>
+                    <!-- BOTTOM CARD AREA -->
+                    <div class="d-flex flex-column">
+                        <div class="d-flex flex-row justify-content-center pcard-container">
+                            <div ng-repeat="card in cards track by $index">
+                                <div tabindex="$index" ng-click="checkChanged(card)" ng-class="{selected: card.selected, disabled: (checked==limit && !card.selected) || (lockAll && !card.selected) || (lockSpecial && card.specialCard) }"
+                                    class="pcard grow-on-hover" ng-random-card-view ng-isback="false">
+                                    <p>{{card.value}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="flex-1"></div>
+                            <!--<button class="btn btn-light m-2" ng-click="confimCardSelection()">Select Card</button>-->
+                            <button class="btn btn-light m-2" ng-click="resetCardSelection()">Reset</button>
+                            <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin">Open</button>
+                            <button class="btn btn-light m-2" ng-click="resetCards()" ng-show="isAdmin">Reset ALL</button>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex flex-row">
-                    <div class="flex-1"></div>
-                    <!--<button class="btn btn-light m-2" ng-click="confimCardSelection()">Select Card</button>-->
-                    <button class="btn btn-light m-2" ng-click="resetCardSelection()">Reset</button>
-                    <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin">Open</button>
-                    <button class="btn btn-light m-2" ng-click="resetCards()" ng-show="isAdmin">Reset ALL</button>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <div class="row h-100 d-flex flex-column">
+                    <div class="d-flex flex-column flex-1">
+                        <p class="lead m-0 p-2 bg-light"><b>Users</b></p>
+                        <ul class="list-group list-group-flush flex-1 side-list-container pt-3 pb-3 pl-2 pr-2">
+                            <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index"
+                                ng-show="user.isActive">
+                                <span ng-show='user.isAdmin'>★</span>{{user.username}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex flex-column flex-1">
+                        <p class="lead m-0 p-2 bg-light"><b>Info</b></p>
+                        <ul class="list-group flex-1 list-group-flush side-list-container pt-3 pb-3 pl-2 pr-2">
+                            <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
+                                <span>{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="d-flex flex-column w-20">
-            <div class="d-flex flex-column flex-1">
-                <p class="lead m-0 p-2 bg-light"><b>Users</b></p>
-                <ul class="list-group list-group-flush flex-1 side-list-container pt-3 pb-3 pl-2 pr-2">
-                    <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index" ng-show="user.isActive">
-                        <span ng-show='user.isAdmin'>★</span>{{user.username}}
-                    </li>
-                </ul>
-            </div>
-            <div class="d-flex flex-column flex-1">
-                <p class="lead m-0 p-2 bg-light"><b>Info</b></p>
-                <ul class="list-group flex-1 list-group-flush side-list-container pt-3 pb-3 pl-2 pr-2">
-                    <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
-                        <span>{{item}}</span>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
