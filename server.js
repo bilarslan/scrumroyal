@@ -49,11 +49,11 @@ function createPlanningSession(params) {
         var token = socket.handshake.query['token'];
         jwt.verify(token, secretKey, function (err, decoded) {
             if (err) {
-                if(err.name == 'TokenExpiredError'){
+                if (err.name == 'TokenExpiredError') {
                     console.log('TokenExpiredError');
-                }else if(err.name == 'JsonWebTokenError'){
+                } else if (err.name == 'JsonWebTokenError') {
                     console.log('JsonWebTokenError');
-                }else{
+                } else {
                     console.log(err.name);
                 }
                 socket.disconnect(true);
@@ -279,6 +279,18 @@ app.post('/joinSession', function (req, res) {
 
 
 
+});
+
+app.get('/status', function (req, res) {
+    if(req.query.pw === 'whatsup'){
+        var result = sessions.map(x => {
+            var obj = {};
+            obj['config'] = x.sessionConfig;
+            return obj;
+        })
+        return res.json(result);
+    }
+    res.status(404).json({ message: 'Error' });
 });
 
 http.listen(PORT, function () {
