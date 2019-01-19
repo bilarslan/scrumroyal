@@ -202,7 +202,7 @@ angular.module('planningsessionpage-module', [])
 
             socket.on('disconnect', function (data) {
                 $scope.socketStatus = 'Disconnected';
-                authService.setData();
+                //authService.setData();
                 console.log(data);
             });
 
@@ -247,6 +247,11 @@ angular.module('planningsessionpage-module', [])
                 $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞") });
             });
         }
+
+        $scope.$on('$destroy', function(){ 
+            if(socket)
+                socket.disconnect();
+        });
 
     }])
     .directive("ngRandomCardView", function () {
