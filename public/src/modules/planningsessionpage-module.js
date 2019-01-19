@@ -68,7 +68,6 @@ angular.module('planningsessionpage-module', [])
             socket = io('/group-' + socketId, { query: "token=" + token });
 
             socket.on('user.info', function (data) {
-                console.log(data);
                 var action = data.action;
                 if (action == 'CONNECT') {
                     authService.id = data.id;
@@ -95,7 +94,6 @@ angular.module('planningsessionpage-module', [])
                     $scope.isLoggedIn = true;
                 }
                 else if (action == 'CARD.SELECTED') {
-                    console.log(data.selectedCards);
                     $scope.checked = data.selectedCards.length;
                     if (data.selectedCards.length == 0) {
                         $scope.lockAll = false;
@@ -115,8 +113,6 @@ angular.module('planningsessionpage-module', [])
             });
 
             socket.on('server.info', function (data) {
-                console.log(data);
-
                 var action = data.action;
                 if (action == 'CONNECT') {
                     if (data.user.id != authService.id) {
@@ -250,7 +246,6 @@ angular.module('planningsessionpage-module', [])
             cards.forEach(function (element) {
                 $scope.cards.push({ value: element, selected: false, confirmed: false, specialCard: (element == "0" || element == "?" || element == "∞") });
             });
-            console.log($scope.cards);
         }
 
     }])
