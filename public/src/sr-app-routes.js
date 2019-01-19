@@ -17,7 +17,8 @@ angular.module('sr-app-routes', ['ngRoute'])
             .when('/planningsession/:id', {
                 templateUrl: '../views/planningsession.html',
                 controller: 'planningsessionpage-controller'
+            })
+            .when('/about',{
+                templateUrl:'../views/about.html'
             });
-
-
     });
