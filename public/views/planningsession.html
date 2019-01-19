@@ -180,6 +180,8 @@
                 <div class="row h-100 d-flex flex-column">
                     <div class="d-flex p-2 lead royal-board-title">
                         <strong>{{title}}</strong>
+                        <div class="flex-1"></div>
+                        <button class="btn btn-light m-1" data-toggle="modal" data-target="#inviteModal"><i class="fas fa-share-alt"></i> Invite</button>
                     </div>
 
                     <!-- ROYAL BOARD CONTENT -->
@@ -245,60 +247,27 @@
     </div>
 </div>
 
-<!--
-<div ng-show="isLoggedIn">
-    {{title}}
-
-
-    <br>
-    CARDS:
-    <ul>
-        <li ng-repeat="user in users track by $index">
-            <div>
-                <span ng-style="{color: (user.cardSelected == true) ? 'red' : 'black'};">
-                    {{user.username}} </span> - <span>{{user.score}}</span>
-                <br>
-        </li>
-    </ul>
-
-
-    <br>
-    <br>
-
-    <div ng-repeat="card in cards track by $index">
-        <input type="checkbox" ng-model="card.selected" ng-change="checkChanged(card)" ng-disabled="(checked==limit && !card.selected) || (lockAll && !card.selected) || (lockSpecial && card.specialCard)" />
-        <span ng-style="{color: (card.confirmed == true) ? 'red' : 'black'};">{{card.value}}</span>
+<!-- Modal -->
+<div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inviteModalLabel">Invite - Session ID: {{join.sessionId}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input type="text" id="inviteLink" class="form-control" placeholder="Invite Link" aria-label="Invite Link" aria-describedby="basic-addon2" ng-model="inviteLink">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button" ng-click="copyLink()"><i class="fas fa-copy"></i></button>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
     </div>
-
-    <br>
-
-    <button type="button" ng-click="confimCardSelection()">Confim Card Selection!</button>
-
-    <button type="button" ng-click="resetCardSelection()">Reset Card Selection!</button>
-
-    <button type="button" ng-click="openCards()" ng-show="isAdmin">Open Cards!</button>
-
-    <br>
-
-    Users:
-    <ul>
-        <li ng-repeat="user in users track by $index">
-            <div>
-                <div ng-show='user.isAdmin'>★</div> <span>
-                    {{user.username}} </span>
-                <br>
-        </li>
-    </ul>
-
-    <br><br><br>
-    Info:
-    <ul>
-        <li ng-repeat="item in info track by $index">
-            <span>{{item}}</span>
-        </li>
-    </ul>
-
-
-
 </div>
--->

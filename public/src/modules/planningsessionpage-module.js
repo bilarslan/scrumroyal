@@ -28,6 +28,8 @@ angular.module('planningsessionpage-module', [])
         $scope.lockAll = false;
         $scope.lockSpecial = false;
 
+        $scope.inviteLink = $location.absUrl();
+
         var cardSet = [
             { type: ["0", "1", "3", "5", "8", "13", "20", "40", "100", "?", "∞"] },
             { type: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89"] }
@@ -252,6 +254,11 @@ angular.module('planningsessionpage-module', [])
             if(socket)
                 socket.disconnect();
         });
+
+        $scope.copyLink = function () {
+            $('#inviteLink').select();
+            document.execCommand("copy");
+        }
 
     }])
     .directive("ngRandomCardView", function () {
