@@ -218,7 +218,7 @@
                             <!--<button class="btn btn-light m-2" ng-click="confimCardSelection()">Select Card</button>-->
                             <button class="btn btn-light m-2" ng-click="resetCardSelection()">Reset</button>
                             <button class="btn btn-light m-2" ng-click="openCards()" ng-show="isAdmin">Show Results</button>
-                            <button class="btn btn-light m-2" ng-click="resetCards()" ng-show="isAdmin">Reset All</button>
+                            <button class="btn btn-light m-2" ng-click="resetCards()" ng-show="isAdmin">Reset Results</button>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
             <div class="col-md-4 col-lg-3">
                 <div class="row h-100 d-flex flex-column">
                     <div class="d-flex flex-column flex-1">
-                        <p class="lead m-0 p-2 bg-light"><i class="fas fa-users"></i> <b>Users - {{users.length}}</b></p>
+                        <p class="lead m-0 p-2 bg-light"><i class="fas fa-users fa-sm"></i> <b>Users - {{users.length}}</b></p>
                         <ul class="list-group list-group-flush flex-1 side-list-container pt-3 pb-3 pl-2 pr-2">
                             <li class="list-group-item" style="padding: 5px" ng-repeat="user in users track by $index"
                                 ng-show="user.isActive">
@@ -235,7 +235,7 @@
                         </ul>
                     </div>
                     <div class="d-flex flex-column flex-1">
-                        <p class="lead m-0 p-2 bg-light"><i class="fas fa-info"></i> <b>Info</b></p>
+                        <p class="lead m-0 p-2 bg-light"><i class="fas fa-info fa-sm"></i> <b>Info</b></p>
                         <ul class="list-group flex-1 list-group-flush side-list-container pt-3 pb-3 pl-2 pr-2">
                             <li class="list-group-item" style="padding: 5px" ng-repeat="item in info track by $index">
                                 <span>{{item}}</span>
