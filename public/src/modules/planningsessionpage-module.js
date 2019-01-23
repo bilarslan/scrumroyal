@@ -41,6 +41,7 @@ angular.module('planningsessionpage-module', [])
         if (localData.sessionId == sessionId && localData.token) {
             initializeSocket(localData.sessionId, localData.token);
         } else {
+            authService.setData();
             $location.path('/join/' + $scope.join.sessionId);
         }
 
