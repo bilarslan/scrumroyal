@@ -18,7 +18,7 @@
 
     .pcard {
         position: relative;
-        margin: 7px;
+        margin: 10px;
         font: inherit;
         border-radius: 5px;
         background: white;
@@ -67,7 +67,7 @@
 
     .pcard .name {
         text-align: center;
-        font: 16px Georgia, serif;
+        font: 0.8vw Georgia, serif;
     }
 
     .pcard.pback .name {
@@ -182,7 +182,7 @@
                         <strong>{{title}}</strong>
                         <div class="flex-1"></div>
                         <button class="btn btn-light m-1" data-toggle="modal" data-target="#inviteModal"><i class="fas fa-share-alt"></i></button>
-                        <button class="btn btn-light m-1" ng-show="isAdmin"><i class="fas fa-cog"></i></button>
+                        <button class="btn btn-light m-1" ng-show="isAdmin" ng-disabled="true"><i class="fas fa-cog"></i></button>
                     </div>
 
                     <!-- ROYAL BOARD CONTENT -->
@@ -194,7 +194,7 @@
                             <div ng-repeat="user in results track by $index" ng-show="user.cardSelected">
                                 <div class="pcard" ng-random-card-view ng-isback="user.score == -1 ? true:false">
                                     <p ng-show="user.score != -1">{{user.score}}</p>
-                                    <div class="name">{{user.username}}</div>
+                                    <div class="name">{{user.username | limitTo: 8}}{{user.username.length < 8 ? '' : '..'}} </div>
                                 </div>
 
                             </div>
