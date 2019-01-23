@@ -6,7 +6,7 @@
             <form ng-submit="joinSession()">
                 <div class="form-group">
                     <label for="inputSessionID">Session ID</label>
-                    <input type="text" class="form-control" id="inputSessionID" placeholder="Enter session id" ng-model="join.sessionId" ng-required="true">
+                    <input type="text" class="form-control" id="inputSessionID" placeholder="Enter session id" ng-model="join.sessionId" ng-required="true" maxlength="4">
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="checkIsPrivate" ng-model="join.isPrivate">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-group">
                     <label for="inputUsername">Username</label>
-                    <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="join.username" ng-required="true">
+                    <input type="text" class="form-control" id="inputUsername" placeholder="Username" ng-model="join.username" ng-required="true" maxlength="10">
                 </div>
                 <div class="form-group" ng-show="message">
                     <div class="alert alert-danger" role="alert">
