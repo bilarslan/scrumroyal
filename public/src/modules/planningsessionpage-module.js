@@ -121,14 +121,14 @@ angular.module('planningsessionpage-module', [])
                     if (data.user.id != authService.id) {
                         $scope.users.push(data.user);
                     }
-                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is connected.');
+                    pushInfoMessage(data.user.username + ' has been connected.');
                 }
                 else if (action == 'DISCONNECT') {
                     for (var i = 0; i < $scope.users.length; i++) {
                         var user = $scope.users[i];
                         if (user.username == data.user.username) {
                             $scope.users.splice(i, 1);
-                            $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + data.user.username + ' is disconnected.');
+                            pushInfoMessage(data.user.username + ' has been disconnected.');
                             break;
                         }
                     }
@@ -151,7 +151,7 @@ angular.module('planningsessionpage-module', [])
                             if (result.score == -1) {
                                 result.cardSelected = data.cardSelected;
                             } else {
-                                //Update animation
+                                pushInfoMessage(result.username + ' has updated him/his card.');
                             }
                             break;
                         }
@@ -185,6 +185,7 @@ angular.module('planningsessionpage-module', [])
                             }
                         }
                     });
+                    pushInfoMessage('The results have been shown by Scrum Master.');
                 }
                 else if (action == 'RESET.ALL.CARDS') {
                     $scope.results = [];
@@ -196,8 +197,7 @@ angular.module('planningsessionpage-module', [])
                         element.selected = element.confirmed = false;
                     });
 
-                    $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + 'Admin reset all results.');
-
+                    pushInfoMessage('The results have been reseted by Scrum Master.');
                 }
 
                 $scope.$apply();
@@ -243,6 +243,16 @@ angular.module('planningsessionpage-module', [])
             }
         }
 
+        $scope.$on('$destroy', function () {
+            if (socket)
+                socket.disconnect();
+        });
+
+        $scope.copyLink = function () {
+            $('#inviteLink').select();
+            document.execCommand("copy");
+        }
+
         function buildCards(cards, cardLimit) {
             $scope.cards = [];
             $scope.limit = cardLimit;
@@ -251,15 +261,10 @@ angular.module('planningsessionpage-module', [])
             });
         }
 
-        $scope.$on('$destroy', function(){ 
-            if(socket)
-                socket.disconnect();
-        });
-
-        $scope.copyLink = function () {
-            $('#inviteLink').select();
-            document.execCommand("copy");
+        function pushInfoMessage(msg){
+            $scope.info.push('[ ' + new Date().toLocaleTimeString() + ' ] ' + msg);
         }
+
 
     }])
     .directive("ngRandomCardView", function () {
