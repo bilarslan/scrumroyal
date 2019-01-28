@@ -30,6 +30,8 @@ function createPlanningSession(params) {
     var title = params.title;
     var cardLimit = params.cardLimit;
     var cardSet = params.cardSet;
+    var date = params.date;
+    var admin = params.admin;
 
     var group = io.of('/group-' + sessionId);
 
@@ -39,7 +41,9 @@ function createPlanningSession(params) {
         password: password,
         cardLimit: cardLimit,
         cardSet: cardSet,
-        users: []
+        users: [],
+        date: date,
+        admin: admin
     }
 
     sessions.push(group);
@@ -220,7 +224,9 @@ app.post('/newPlanning', function (req, res) {
         title: title,
         password: password,
         cardLimit: cardLimit,
-        cardSet: cardSet
+        cardSet: cardSet,
+        date: Date.now(),
+        admin: username
     };
 
     var token = jwt.sign({
@@ -282,7 +288,7 @@ app.post('/joinSession', function (req, res) {
 });
 
 app.get('/status', function (req, res) {
-    if(req.query.pw === 'whatsup'){
+    if (req.query.pw === 'whatsup') {
         var result = sessions.map(x => {
             var obj = {};
             obj['config'] = x.sessionConfig;
