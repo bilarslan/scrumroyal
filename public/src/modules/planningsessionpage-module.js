@@ -21,7 +21,6 @@ angular.module('planningsessionpage-module', [])
         $scope.checked = 0;
         $scope.limit = 0;
 
-
         $scope.cards = [];
         $scope.results = [];
 
