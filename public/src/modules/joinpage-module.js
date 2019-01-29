@@ -1,6 +1,10 @@
 angular.module('joinpage-module', [])
     .controller('joinpage-controller', ['$scope', '$http', '$location', '$routeParams', 'authService', function ($scope, $http, $location, $routeParams, authService) {
 
+        if(authService.getData().sessionId){
+            authService.setData();
+            location.reload();
+        }
 
         $scope.join = {
             sessionId: $routeParams.id,
