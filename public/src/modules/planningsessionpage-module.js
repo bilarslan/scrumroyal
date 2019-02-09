@@ -150,7 +150,7 @@ angular.module('planningsessionpage-module', [])
                             if (result.score == -1) {
                                 result.cardSelected = data.cardSelected;
                             } else {
-                                pushInfoMessage(result.username + ' has updated him/his card.');
+                                pushInfoMessage(result.username + ' has updated her/his card.');
                             }
                             break;
                         }
